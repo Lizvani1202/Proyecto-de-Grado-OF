@@ -1,11 +1,10 @@
-package com.example.SistemaGIS.Repo;
+package com.example.SistemaGIS.Repository;
 
 import com.example.SistemaGIS.Model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface UserRepo extends JpaRepository<User,String> {
-
-    User findByUserId(String userId);
+public interface UserRepository extends JpaRepository<User, String> {
+    User findUsersByEmail (String email);
 }
