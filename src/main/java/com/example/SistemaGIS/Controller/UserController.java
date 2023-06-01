@@ -5,24 +5,20 @@ import com.example.SistemaGIS.Model.UserLogin;
 import com.example.SistemaGIS.Model.User;
 import com.example.SistemaGIS.Repository.PersonRepository;
 import com.example.SistemaGIS.Repository.UserRepository;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/users")
+@AllArgsConstructor
 //@CrossOrigin(origins = "http://localhost:4200")
 public class UserController {
 
 
     private final UserRepository userRepository;
     private final PersonRepository personRepository;
-
-    @Autowired
-    public UserController(UserRepository userRepository, PersonRepository personRepository) {
-        this.userRepository = userRepository;
-        this.personRepository = personRepository;
-    }
 
     @PostMapping("/login")
     public ResponseEntity<?> loginUser(@RequestBody UserLogin loginData){

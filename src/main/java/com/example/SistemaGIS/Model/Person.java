@@ -3,14 +3,16 @@ package com.example.SistemaGIS.Model;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import javax.persistence.*;
-import javax.persistence.CascadeType;
 import java.util.Date;
 
 
 @Entity
 @Table(name = "person")
 @AllArgsConstructor
+@NoArgsConstructor
 @Data
 public class Person {
     @Id
@@ -36,7 +38,4 @@ public class Person {
 
     @Column(name = "city")
     private String city;
-
-
-    public Person() {}
 }
