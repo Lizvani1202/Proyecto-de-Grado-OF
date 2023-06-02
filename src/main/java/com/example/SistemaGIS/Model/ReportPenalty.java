@@ -17,8 +17,8 @@ import java.util.Date;
 public class ReportPenalty {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "report_id")
-    private Long reportId;
+    @Column(name = "report_penalty_id")
+    private Long reportPenaltyId;
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "car_features_id")

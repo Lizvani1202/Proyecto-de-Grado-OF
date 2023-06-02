@@ -12,7 +12,7 @@ import java.util.Date;
 @NoArgsConstructor
 public class ReportPenaltyResponseDTO {
 
-    public Long reportId;
+    public Long reportPenaltyId;
 
     public CarFeaturesDTO carFeatures;
 
@@ -31,7 +31,7 @@ public class ReportPenaltyResponseDTO {
     public String checkpointExit;
 
     public ReportPenaltyResponseDTO(ReportPenalty reportPenalty){
-        this.reportId = reportPenalty.getReportId();
+        this.reportPenaltyId = reportPenalty.getReportPenaltyId();
         this.carFeatures = new CarFeaturesDTO();
         this.carFeatures.CarFeaturesId = reportPenalty.getCarFeatures().getCarFeaturesId();
         this.carFeatures.NumberPlate = reportPenalty.getCarFeatures().getNumberPlate();

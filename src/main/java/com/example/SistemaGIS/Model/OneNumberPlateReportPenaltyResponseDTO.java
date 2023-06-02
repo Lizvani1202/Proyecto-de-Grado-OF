@@ -3,7 +3,6 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import java.util.Date;
 
@@ -12,7 +11,7 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 public class OneNumberPlateReportPenaltyResponseDTO {
-    public Long reportId;
+    public Long reportPenaltyId;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     public Date date;
@@ -28,7 +27,7 @@ public class OneNumberPlateReportPenaltyResponseDTO {
     public String checkpointExit;
 
     public OneNumberPlateReportPenaltyResponseDTO(ReportPenalty reportPenalty){
-        this.reportId = reportPenalty.getReportId();
+        this.reportPenaltyId = reportPenalty.getReportPenaltyId();
         this.date = reportPenalty.getDate();
         this.debtAmount = reportPenalty.getDebtAmount();
         this.status = reportPenalty.getStatus();
