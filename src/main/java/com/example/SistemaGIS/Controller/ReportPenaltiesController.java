@@ -6,7 +6,6 @@ import com.example.SistemaGIS.Model.ReportPenaltyCreateRequest;
 import com.example.SistemaGIS.Model.ReportPenaltyResponse;
 import com.example.SistemaGIS.Repository.ReportPenaltyRepository;
 import com.example.SistemaGIS.Service.ReportPenaltyService;
-import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
@@ -36,7 +35,7 @@ public class ReportPenaltiesController {
     }
 
     @GetMapping("/get-report-penalties")
-    public ResponseEntity<?> getReportPenaltiesByOwnerID(@RequestParam("number_plate") String numberPlate, @RequestParam("status") Integer status){
+    public ResponseEntity<?> getReportPenalties(@RequestParam("number_plate") String numberPlate, @RequestParam("status") Integer status){
         try {
             List<ReportPenaltyResponse> reportPenalties = reportPenaltyRepository.getReportPenaltiesByNumberPlateAndStatus(numberPlate, status);
             return ResponseEntity.ok(reportPenalties);
@@ -47,7 +46,7 @@ public class ReportPenaltiesController {
     }
 
     @GetMapping("/get-all-report-penalties")
-    public ResponseEntity<?> getAllReportPenaltiesByOwnerID(@RequestParam("date") @DateTimeFormat(pattern = "yyyy-MM-dd") Date date, @RequestParam("status") Integer status){
+    public ResponseEntity<?> getAllReportPenalties(@RequestParam("date") @DateTimeFormat(pattern = "yyyy-MM-dd") Date date, @RequestParam("status") Integer status){
         try {
             List<AllReportPenaltyResponseDTO> reportPenalties = reportPenaltyRepository.getReportPenaltiesByDateAnAndStatus(date, status);
             return ResponseEntity.ok(reportPenalties);
