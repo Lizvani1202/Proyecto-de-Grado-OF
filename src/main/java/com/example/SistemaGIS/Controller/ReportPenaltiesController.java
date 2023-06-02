@@ -1,9 +1,9 @@
 package com.example.SistemaGIS.Controller;
 
-import com.example.SistemaGIS.Model.AllReportPenaltyResponseDTO;
+import com.example.SistemaGIS.Model.ReportPenaltyResponseDTO;
 import com.example.SistemaGIS.Model.ReportPenalty;
-import com.example.SistemaGIS.Model.ReportPenaltyCreateRequest;
-import com.example.SistemaGIS.Model.ReportPenaltyResponse;
+import com.example.SistemaGIS.Model.ReportPenaltyPostRequestDTO;
+import com.example.SistemaGIS.Model.OneNumberPlateReportPenaltyResponseDTO;
 import com.example.SistemaGIS.Repository.ReportPenaltyRepository;
 import com.example.SistemaGIS.Service.ReportPenaltyService;
 import lombok.AllArgsConstructor;
@@ -22,12 +22,13 @@ public class ReportPenaltiesController {
     private final ReportPenaltyService reportPenaltyService;
 
     @PostMapping("/add-report-penalty")
-    public ResponseEntity<?> addReportPenalty(@RequestBody ReportPenaltyCreateRequest reportPenaltyData){
+    public ResponseEntity<?> addReportPenalty(@RequestBody ReportPenaltyPostRequestDTO reportPenaltyData){
         try {
             ReportPenalty reportPenalty = reportPenaltyService.instanceReportPenalty(reportPenaltyData);
             ReportPenalty reportPenaltyWithDebt = reportPenaltyService.calcDebtAmount(reportPenalty);
             ReportPenalty savedReport =  reportPenaltyRepository.save(reportPenaltyWithDebt);
-            return ResponseEntity.ok(savedReport);
+            ReportPenaltyResponseDTO response = new ReportPenaltyResponseDTO(savedReport);
+            return ResponseEntity.ok(response);
         } catch (Exception e){
             e.printStackTrace();
             return ResponseEntity.status(500).body("Error interno del servidor");
@@ -37,8 +38,9 @@ public class ReportPenaltiesController {
     @GetMapping("/get-report-penalties")
     public ResponseEntity<?> getReportPenalties(@RequestParam("number_plate") String numberPlate, @RequestParam("status") Integer status){
         try {
-            List<ReportPenaltyResponse> reportPenalties = reportPenaltyRepository.getReportPenaltiesByNumberPlateAndStatus(numberPlate, status);
-            return ResponseEntity.ok(reportPenalties);
+            List<ReportPenalty> reportPenalties = reportPenaltyRepository.findAllByCarFeaturesNumberPlateAndStatusOrderByDateDesc(numberPlate, status);
+            List<OneNumberPlateReportPenaltyResponseDTO> response = reportPenaltyService.getOneNumberPlateReportPenaltyResponseDTOList(reportPenalties);
+            return ResponseEntity.ok(response);
         } catch (Exception e){
             e.printStackTrace();
             return ResponseEntity.status(500).body("Error interno del servidor");
@@ -48,7 +50,8 @@ public class ReportPenaltiesController {
     @GetMapping("/get-all-report-penalties")
     public ResponseEntity<?> getAllReportPenalties(@RequestParam("date") @DateTimeFormat(pattern = "yyyy-MM-dd") Date date, @RequestParam("status") Integer status){
         try {
-            List<AllReportPenaltyResponseDTO> reportPenalties = reportPenaltyRepository.getReportPenaltiesByDateAnAndStatus(date, status);
+            List<ReportPenalty> reportPenalties = reportPenaltyRepository.findAllByDateBetweenAndStatusOrderByDateDesc(date, status);
+            List<ReportPenaltyResponseDTO> response = reportPenaltyService.getReportPenaltyResponseDTOList(reportPenalties);
             return ResponseEntity.ok(reportPenalties);
         } catch (Exception e){
             e.printStackTrace();
