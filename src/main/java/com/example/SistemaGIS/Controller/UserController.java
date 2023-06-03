@@ -1,30 +1,27 @@
 package com.example.SistemaGIS.Controller;
 
-import com.example.SistemaGIS.Model.Person;
-import com.example.SistemaGIS.Model.UserLogin;
-import com.example.SistemaGIS.Model.User;
-import com.example.SistemaGIS.Repository.PersonRepository;
-import com.example.SistemaGIS.Repository.UserRepository;
+import com.example.SistemaGIS.Model.*;
+import com.example.SistemaGIS.Service.PersonService;
+import com.example.SistemaGIS.Service.UserService;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/users")
 @AllArgsConstructor
-//@CrossOrigin(origins = "http://localhost:4200")
+@Slf4j
 public class UserController {
 
 
-    private final UserRepository userRepository;
-    private final PersonRepository personRepository;
+    private final UserService userService;
+    private final PersonService personService;
 
     @PostMapping("/login")
     public ResponseEntity<?> loginUser(@RequestBody UserLogin loginData){
         try {
-            System.out.println(loginData);
-            User user = userRepository.findUsersByEmail(loginData.getEmail());
+            User user = userService.getUser(loginData.getEmail()).orElseThrow(()-> new Exception("Usuario no encontrado"));
             if (user.getPassword().equals(loginData.getPassword()))
                 return ResponseEntity.ok(user);
             return ResponseEntity.status(401).body("Datos de inicio de sesion invalidos");
@@ -34,17 +31,16 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<?> registerUser(@RequestBody User userData){
+    public ResponseEntity<?> registerUser(@RequestBody UserRegisterRequestDTO userData){
         try{
-        System.out.println(userData);
-        Person person = userData.getPerson();
-
-        Person savedPerson = personRepository.save(person);
-        userData.setPerson(savedPerson);
-
-        User savedUser = userRepository.save(userData);
-        return ResponseEntity.ok(savedUser);
-        }catch (Exception ignored) {
+            User user = userService.instanceUser(userData);
+            userService.addRoleToUser(user, "USER"); //TODO: Change role based on current user role
+            log.info("User: "+user.toString());
+            User savedUser = userService.saveUser(user).orElseThrow(()-> new Exception("Error al guardar usuario"));
+            UserRegisterResponseDTO response = new UserRegisterResponseDTO(savedUser);
+            return ResponseEntity.ok(response);
+        }catch (Exception e) {
+            e.printStackTrace();
             return ResponseEntity.status(500).body("Error interno del servidor");
         }
     }

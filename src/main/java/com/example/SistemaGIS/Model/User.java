@@ -6,6 +6,8 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import javax.persistence.CascadeType;
+import java.util.Collection;
+import java.util.HashSet;
 
 @Entity
 @Table(name="user")
@@ -34,4 +36,12 @@ public class User {
 
     @Column(name = "status")
     private Integer status;
+
+    @ManyToMany
+    @JoinTable(
+            name = "user_role",
+            joinColumns = @JoinColumn(name = "user_id",referencedColumnName = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id",referencedColumnName = "role_id")
+    )
+    private Collection<Role> userRoles = new HashSet<>();
 }
