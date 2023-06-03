@@ -6,8 +6,11 @@ import com.example.SistemaGIS.Service.ReportPenaltyService;
 import lombok.AllArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.net.URI;
 import java.util.Date;
 import java.util.List;
 
@@ -19,21 +22,23 @@ public class ReportPenaltiesController {
     private final ReportPenaltyService reportPenaltyService;
 
     @PostMapping("/add-report-penalty")
+    @PreAuthorize("hasAnyAuthority('ROOT', 'SIS_POLICIA', 'POLICIA')")
     public ResponseEntity<?> addReportPenalty(@RequestBody ReportPenaltyPostRequestDTO reportPenaltyData){
         try {
             ReportPenalty reportPenalty = reportPenaltyService.instanceReportPenalty(reportPenaltyData);
             ReportPenalty reportPenaltyWithDebt = reportPenaltyService.calcDebtAmount(reportPenalty);
             ReportPenalty savedReport =  reportPenaltyRepository.save(reportPenaltyWithDebt);
             ReportPenaltyResponseDTO response = new ReportPenaltyResponseDTO(savedReport);
-            return ResponseEntity.ok(response);
+            URI location = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/drivers/get-report-penalty").toUriString());
+            return ResponseEntity.created(location).body(response);
         } catch (Exception e){
             e.printStackTrace();
             return ResponseEntity.status(500).body("Error interno del servidor");
         }
     }
 
-//    /cancel-report-penalty")
     @PutMapping("/cancel-report-penalty")
+    @PreAuthorize("hasAnyAuthority('ROOT', 'SIS_POLICIA', 'POLICIA')")
     public ResponseEntity<?> cancelReportPenalty(@RequestBody ReportPenaltyCancelDTO reportPenaltyCancelDTO){
         try {
             ReportPenalty reportPenalty = reportPenaltyRepository.findById(reportPenaltyCancelDTO.getReportPenaltyId())
@@ -49,7 +54,7 @@ public class ReportPenaltiesController {
     }
 
 
-    @GetMapping("/get-report-penalties")
+    @GetMapping("/get-report-penalty")
     public ResponseEntity<?> getReportPenalties(@RequestParam("number_plate") String numberPlate, @RequestParam("status") Integer status){
         try {
             List<ReportPenalty> reportPenalties = reportPenaltyRepository.findAllByCarFeaturesNumberPlateAndStatusOrderByDateDesc(numberPlate, status);
@@ -62,6 +67,7 @@ public class ReportPenaltiesController {
     }
 
     @GetMapping("/get-all-report-penalties")
+    @PreAuthorize("hasAnyAuthority('ROOT', 'SIS_POLICIA', 'POLICIA')")
     public ResponseEntity<?> getAllReportPenalties(@RequestParam("date") @DateTimeFormat(pattern = "yyyy-MM-dd") Date date, @RequestParam("status") Integer status){
         try {
             List<ReportPenalty> reportPenalties = reportPenaltyRepository.findAllByDateBetweenAndStatusOrderByDateDesc(date, status);

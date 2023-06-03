@@ -1,0 +1,54 @@
+package com.example.SistemaGIS.Security;
+
+
+import com.example.SistemaGIS.Filter.CustomBasicAuthAuthenticationEntryPoint;
+import com.example.SistemaGIS.Filter.CustomJWTAuthenticationFilter;
+import com.example.SistemaGIS.Filter.CustomJWTAuthorizationFilter;
+import lombok.AllArgsConstructor;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.authentication.www.BasicAuthenticationEntryPoint;
+
+import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
+
+@Configuration
+@AllArgsConstructor
+@EnableGlobalMethodSecurity(prePostEnabled = true)
+public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+    private final UserDetailsService userDetailsService;
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final CustomBasicAuthAuthenticationEntryPoint basicAuthenticationEntryPoint;
+
+    @Override
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+        auth.userDetailsService(userDetailsService).passwordEncoder(bCryptPasswordEncoder);
+    }
+
+    @Override
+    protected void configure(HttpSecurity httpSecurity) throws Exception {
+        CustomJWTAuthenticationFilter customJWTAuthenticationFilter = new CustomJWTAuthenticationFilter(authenticationManagerBean());
+        customJWTAuthenticationFilter.setFilterProcessesUrl("/users/login");
+        httpSecurity.csrf().disable();
+        httpSecurity.authorizeRequests().antMatchers("/users/login/**", "/drivers/get-report-penalty/**", "/users/register/**").permitAll();
+        httpSecurity.httpBasic().authenticationEntryPoint(basicAuthenticationEntryPoint);
+        httpSecurity.authorizeRequests().anyRequest().authenticated();
+        httpSecurity.addFilter(customJWTAuthenticationFilter);
+        httpSecurity.sessionManagement().sessionCreationPolicy(STATELESS);
+        httpSecurity.addFilterBefore(new CustomJWTAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class);
+    }
+
+    @Bean
+    @Override
+    public AuthenticationManager authenticationManager() throws Exception {
+        return super.authenticationManager();
+    }
+
+}
