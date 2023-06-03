@@ -3,6 +3,9 @@ package com.example.SistemaGIS.Model;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import javax.persistence.CascadeType;
@@ -14,7 +17,7 @@ import java.util.HashSet;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class User {
+public class User implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -37,11 +40,43 @@ public class User {
     @Column(name = "status")
     private Integer status;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "user_role",
             joinColumns = @JoinColumn(name = "user_id",referencedColumnName = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id",referencedColumnName = "role_id")
     )
     private Collection<Role> userRoles = new HashSet<>();
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        Collection<SimpleGrantedAuthority> authorities = new HashSet<>();
+        userRoles.forEach(role -> authorities.add(new SimpleGrantedAuthority(role.getRoleName())));
+        return authorities;
+    }
+
+    @Override
+    public String getUsername() {
+        return this.email;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return this.status == 1;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return this.status == 1;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return this.status == 1;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return this.status == 1;
+    }
 }

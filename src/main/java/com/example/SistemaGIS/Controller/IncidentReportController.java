@@ -14,7 +14,7 @@ import java.util.List;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping("/api/customers")
+@RequestMapping("/customers")
 public class IncidentReportController {
     private final IncidentReportRepository reportPenaltyRepository;
     private final IncidenReportService reportPenaltyService;

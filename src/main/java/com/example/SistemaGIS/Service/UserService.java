@@ -8,25 +8,29 @@ import com.example.SistemaGIS.Repository.RoleRepository;
 import com.example.SistemaGIS.Repository.UserRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Optional;
 
 @Service
 @AllArgsConstructor
 @Transactional
 @Slf4j
-public class UserService {
+public class UserService implements UserDetailsService {
 
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
-
-
-    public Optional<User> getUser(String email){
-        return userRepository.findUsersByEmail(email);
-    }
+    private final PasswordEncoder passwordEncoder;
 
     public Optional<User> saveUser(User user){
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         return Optional.of(userRepository.save(user));
     }
     public void addRoleToUser(User user, String rolename){
@@ -49,5 +53,10 @@ public class UserService {
         person.setCity(userData.getPerson().getCity());
         user.setPerson(person);
         return user;
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        return userRepository.findUsersByEmail(email).orElseThrow(()-> new UsernameNotFoundException("User not found"));
     }
 }

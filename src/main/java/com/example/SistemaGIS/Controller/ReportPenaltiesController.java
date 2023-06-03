@@ -13,7 +13,7 @@ import java.util.List;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping("/api/drivers")
+@RequestMapping("/drivers")
 public class ReportPenaltiesController {
     private final ReportPenaltyRepository  reportPenaltyRepository;
     private final ReportPenaltyService reportPenaltyService;
