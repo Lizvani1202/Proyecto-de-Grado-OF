@@ -37,7 +37,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         CustomJWTAuthenticationFilter customJWTAuthenticationFilter = new CustomJWTAuthenticationFilter(authenticationManagerBean());
         customJWTAuthenticationFilter.setFilterProcessesUrl("/users/login");
         httpSecurity.csrf().disable();
-        httpSecurity.authorizeRequests().antMatchers("/users/login/**", "/drivers/get-report-penalty/**", "/users/register/**").permitAll();
+        httpSecurity.authorizeRequests().antMatchers("/users/login/**", "/drivers/get-report-penalty/**", "/users/refresh-token/**").permitAll();
         httpSecurity.httpBasic().authenticationEntryPoint(basicAuthenticationEntryPoint);
         httpSecurity.authorizeRequests().anyRequest().authenticated();
         httpSecurity.addFilter(customJWTAuthenticationFilter);

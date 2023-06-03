@@ -26,6 +26,11 @@ public class UserService implements UserDetailsService {
     private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
 
+
+    public Optional<User> getUser(String email){
+        return userRepository.findUserByEmail(email);
+    }
+
     public Optional<User> saveUser(User user){
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         return Optional.of(userRepository.save(user));
