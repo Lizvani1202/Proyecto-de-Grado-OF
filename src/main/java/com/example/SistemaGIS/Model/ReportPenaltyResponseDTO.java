@@ -4,99 +4,126 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Date;
 
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class ReportPenaltyResponseDTO {
-
     public Long reportPenaltyId;
-
     public CarFeaturesDTO carFeatures;
-
+    public OwnerDTO owner;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     public LocalDateTime date;
-
     public Integer debtAmount;
-    public OwnerDTO owner;
-
+    public TollDTO toll;
     public Integer status;
 
-    public Integer mileage;
-
-    public String checkpointArrival;
-
-    public String checkpointExit;
 
     public ReportPenaltyResponseDTO(ReportPenalty reportPenalty){
-        this.reportPenaltyId = reportPenalty.getReportPenaltyId();
-        this.carFeatures = new CarFeaturesDTO();
-        this.carFeatures.CarFeaturesId = reportPenalty.getCarFeatures().getCarFeaturesId();
-        this.carFeatures.NumberPlate = reportPenalty.getCarFeatures().getNumberPlate();
-        this.carFeatures.Brand = reportPenalty.getCarFeatures().getBrand();
-        this.carFeatures.Policy = reportPenalty.getCarFeatures().getPolicy();
-        this.carFeatures.Country = reportPenalty.getCarFeatures().getCountry();
-        this.carFeatures.Traction = reportPenalty.getCarFeatures().getTraction();
-        this.carFeatures.Color = reportPenalty.getCarFeatures().getColor();
-        this.carFeatures.Type = reportPenalty.getCarFeatures().getType();
-        this.carFeatures.Model = reportPenalty.getCarFeatures().getModel();
-        this.carFeatures.Service = reportPenalty.getCarFeatures().getService();
-        this.carFeatures.Filling = reportPenalty.getCarFeatures().getFilling();
-        this.carFeatures.Status = reportPenalty.getCarFeatures().getStatus();
-        this.date = reportPenalty.getDate();
-        this.debtAmount = reportPenalty.getDebtAmount();
-        this.owner = new OwnerDTO();
-        this.owner.OwnerId = reportPenalty.getOwner().getOwnerId();
-        this.owner.Status = reportPenalty.getOwner().getStatus();
-        this.owner.Person = new personDTO();
-        this.owner.Person.PersonId = reportPenalty.getOwner().getPerson().getPersonId();
-        this.owner.Person.FirstName = reportPenalty.getOwner().getPerson().getFirstName();
-        this.owner.Person.FirstSurname = reportPenalty.getOwner().getPerson().getFirstSurname();
-        this.owner.Person.SecondSurname = reportPenalty.getOwner().getPerson().getSecondSurname();
-        this.owner.Person.BirthDate = reportPenalty.getOwner().getPerson().getBirthDate();
-        this.owner.Person.Address = reportPenalty.getOwner().getPerson().getAddress();
-        this.owner.Person.City = reportPenalty.getOwner().getPerson().getCity();
-        this.status = reportPenalty.getStatus();
-        this.mileage = reportPenalty.getMileage();
-        this.checkpointArrival = reportPenalty.getCheckpointArrival();
-        this.checkpointExit = reportPenalty.getCheckpointExit();
+        this.setReportPenaltyId(reportPenalty.getReportPenaltyId());
+        CarFeaturesDTO carFeaturesDTO = new CarFeaturesDTO();
+        carFeaturesDTO.setCarFeaturesId(reportPenalty.getCarFeatures().getCarFeaturesId());
+        carFeaturesDTO.setNumberPlate(reportPenalty.getCarFeatures().getNumberPlate());
+        carFeaturesDTO.setBrand(reportPenalty.getCarFeatures().getBrand());
+        carFeaturesDTO.setPolicy(reportPenalty.getCarFeatures().getPolicy());
+        carFeaturesDTO.setCountry(reportPenalty.getCarFeatures().getCountry());
+        carFeaturesDTO.setTraction(reportPenalty.getCarFeatures().getTraction());
+        carFeaturesDTO.setColor(reportPenalty.getCarFeatures().getColor());
+        carFeaturesDTO.setType(reportPenalty.getCarFeatures().getType());
+        carFeaturesDTO.setModel(reportPenalty.getCarFeatures().getModel());
+        carFeaturesDTO.setService(reportPenalty.getCarFeatures().getService());
+        carFeaturesDTO.setFilling(reportPenalty.getCarFeatures().getFilling());
+        carFeaturesDTO.setStatus(reportPenalty.getCarFeatures().getStatus());
+        this.setCarFeatures(carFeaturesDTO);
+        this.setDate(reportPenalty.getDate());
+        this.setDebtAmount(reportPenalty.getDebtAmount());
+        this.setStatus(reportPenalty.getStatus());
+        OwnerDTO ownerDTO = new OwnerDTO();
+        ownerDTO.setOwnerId(reportPenalty.getOwner().getOwnerId());
+        ownerDTO.setStatus(reportPenalty.getOwner().getStatus());
+        personDTO personDTO = new personDTO();
+        personDTO.setPersonId(reportPenalty.getOwner().getPerson().getPersonId());
+        personDTO.setFirstName(reportPenalty.getOwner().getPerson().getFirstName());
+        personDTO.setFirstSurname(reportPenalty.getOwner().getPerson().getFirstSurname());
+        personDTO.setSecondSurname(reportPenalty.getOwner().getPerson().getSecondSurname());
+        personDTO.setBirthDate(reportPenalty.getOwner().getPerson().getBirthDate());
+        personDTO.setAddress(reportPenalty.getOwner().getPerson().getAddress());
+        personDTO.setCity(reportPenalty.getOwner().getPerson().getCity());
+        ownerDTO.setPerson(personDTO);
+        this.setOwner(ownerDTO);
+        TollDTO tollDTO = new TollDTO();
+        tollDTO.tollId = reportPenalty.getToll().getTollId();
+        LocationCheckpointDTO checkpointArrivalDTO = new LocationCheckpointDTO();
+        checkpointArrivalDTO.locationId = reportPenalty.getToll().getCheckpointArrival().getLocationId();
+        checkpointArrivalDTO.name = reportPenalty.getToll().getCheckpointArrival().getName();
+        checkpointArrivalDTO.latitud = reportPenalty.getToll().getCheckpointArrival().getLatitud();
+        checkpointArrivalDTO.longitud = reportPenalty.getToll().getCheckpointArrival().getLongitud();
+        tollDTO.setCheckpointArrival(checkpointArrivalDTO);
+        LocationCheckpointDTO checkpointExitDTO = new LocationCheckpointDTO();
+        checkpointExitDTO.locationId = reportPenalty.getToll().getCheckpointExit().getLocationId();
+        checkpointExitDTO.name = reportPenalty.getToll().getCheckpointExit().getName();
+        checkpointExitDTO.latitud = reportPenalty.getToll().getCheckpointExit().getLatitud();
+        checkpointExitDTO.longitud = reportPenalty.getToll().getCheckpointExit().getLongitud();
+        tollDTO.setCheckpointExit(checkpointExitDTO);
+        tollDTO.setMileageKm(reportPenalty.getToll().getMileageKm());
+        tollDTO.setMaxTimeMin(reportPenalty.getToll().getMaxTimeMin());
+        this.setToll(tollDTO);
     }
 
+    @Data
+    public class TollDTO {
+        public Long tollId;
+        public LocationCheckpointDTO checkpointArrival;
+        public LocationCheckpointDTO checkpointExit;
+        public Integer mileageKm;
+        public Integer maxTimeMin;
+    }
 
+    @Data
+    public class LocationCheckpointDTO {
+        public Long locationId;
+        public String name;
+        public BigDecimal latitud;
+        public BigDecimal longitud;
+    }
+
+    @Data
     class CarFeaturesDTO {
-        public Long CarFeaturesId;
-        public String NumberPlate;
-        public String Brand;
-        public Integer Policy;
-        public Integer Country;
-        public String Traction;
-        public String Color;
-        public String Type;
-        public String Model;
-        public String Service;
-        public String Filling;
-        public Integer Status;
+        public Long carFeaturesId;
+        public String numberPlate;
+        public String brand;
+        public Integer policy;
+        public Integer country;
+        public String traction;
+        public String color;
+        public String type;
+        public String model;
+        public String service;
+        public String filling;
+        public Integer status;
     }
 
+    @Data
     class personDTO {
-        public Long PersonId;
-        public String FirstName;
-        public String FirstSurname;
-        public String SecondSurname;
+        public Long personId;
+        public String firstName;
+        public String firstSurname;
+        public String secondSurname;
 
         @JsonFormat(pattern = "yyyy-MM-dd")
-        public LocalDate BirthDate;
+        public LocalDate birthDate;
 
-        public String Address;
-        public String City;
+        public String address;
+        public String city;
     }
+    @Data
     class OwnerDTO {
-        public Long OwnerId;
-        public Integer Status;
-        public personDTO Person;
+        public Long ownerId;
+        public Integer status;
+        public personDTO person;
     }
 }

@@ -2,7 +2,6 @@ package com.example.SistemaGIS.Service;
 
 import com.example.SistemaGIS.Model.*;
 import com.example.SistemaGIS.Repository.CarFeaturesRepository;
-import com.example.SistemaGIS.Repository.OwnerRepository;
 import com.example.SistemaGIS.Repository.ReportPenaltyRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -15,9 +14,7 @@ import java.util.List;
 @Service
 @AllArgsConstructor
 public class ReportPenaltyService {
-//    private final ReportPenaltyRepository reportPenaltyRepository;
     private final CarFeaturesRepository carFeaturesRepository;
-    private final OwnerRepository ownerRepository;
     private final ReportPenaltyRepository reportPenaltyRepository;
 
     public ReportPenalty instanceReportPenalty(ReportPenaltyPostRequestDTO reportPenaltyData) {
@@ -28,9 +25,6 @@ public class ReportPenaltyService {
         reportPenalty.setCarFeatures(existingCarFeatures);
         reportPenalty.setOwner(existingCarFeatures.getOwner());
         reportPenalty.setDate(reportPenaltyData.getDate());
-        reportPenalty.setMileage(reportPenaltyData.getMileage());
-        reportPenalty.setCheckpointArrival(reportPenaltyData.getCheckpointArrival());
-        reportPenalty.setCheckpointExit(reportPenaltyData.getCheckpointExit());
         return reportPenalty;
     }
 

@@ -8,7 +8,6 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.Date;
 
 @Entity
 @Table(name="report_penalty")
@@ -25,6 +24,10 @@ public class ReportPenalty {
     @JoinColumn(name = "car_features_id")
     private CarFeatures carFeatures;
 
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "owner_id")
+    private Owner owner;
+
     @Column(name = "date")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime date;
@@ -33,18 +36,9 @@ public class ReportPenalty {
     private Integer debtAmount;
 
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "owner_id")
-    private Owner owner;
+    @JoinColumn(name = "toll_id")
+    private Toll toll;
 
     @Column(name = "status")
     private Integer status;
-
-    @Column(name = "mileage")
-    private Integer mileage;
-
-    @Column(name = "checkpoint_arrival")
-    private String checkpointArrival;
-
-    @Column(name = "checkpoint_exit")
-    private String checkpointExit;
 }

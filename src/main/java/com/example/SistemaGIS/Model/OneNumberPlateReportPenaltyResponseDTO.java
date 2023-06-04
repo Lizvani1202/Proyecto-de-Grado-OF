@@ -4,11 +4,11 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Date;
 
 
 @Data
@@ -55,13 +55,45 @@ public class OneNumberPlateReportPenaltyResponseDTO {
             reportPenaltiesDTO.setDate(reportPenalty.getDate());
             reportPenaltiesDTO.setDebtAmount(reportPenalty.getDebtAmount());
             reportPenaltiesDTO.setStatus(reportPenalty.getStatus());
-            reportPenaltiesDTO.setMileage(reportPenalty.getMileage());
-            reportPenaltiesDTO.setCheckpointArrival(reportPenalty.getCheckpointArrival());
-            reportPenaltiesDTO.setCheckpointExit(reportPenalty.getCheckpointExit());
+            TollDTO tollDTO = new TollDTO();
+            tollDTO.setTollId(reportPenalty.getToll().getTollId());
+            LocationCheckpointDTO checkpointArrivalDTO = new LocationCheckpointDTO();
+            checkpointArrivalDTO.setLocationId(reportPenalty.getToll().getCheckpointArrival().getLocationId());
+            checkpointArrivalDTO.setName(reportPenalty.getToll().getCheckpointArrival().getName());
+            checkpointArrivalDTO.setLatitud(reportPenalty.getToll().getCheckpointArrival().getLatitud());
+            checkpointArrivalDTO.setLongitud(reportPenalty.getToll().getCheckpointArrival().getLongitud());
+            LocationCheckpointDTO checkpointExitDTO = new LocationCheckpointDTO();
+            checkpointExitDTO.setLocationId(reportPenalty.getToll().getCheckpointExit().getLocationId());
+            checkpointExitDTO.setName(reportPenalty.getToll().getCheckpointExit().getName());
+            checkpointExitDTO.setLatitud(reportPenalty.getToll().getCheckpointExit().getLatitud());
+            checkpointExitDTO.setLongitud(reportPenalty.getToll().getCheckpointExit().getLongitud());
+            tollDTO.setCheckpointArrival(checkpointArrivalDTO);
+            tollDTO.setCheckpointExit(checkpointExitDTO);
+            tollDTO.setMileageKm(reportPenalty.getToll().getMileageKm());
+            tollDTO.setMaxTimeMin(reportPenalty.getToll().getMaxTimeMin());
+            reportPenaltiesDTO.setToll(tollDTO);
             reportPenaltiesDTOCollection.add(reportPenaltiesDTO);
         }
         this.reportPenalties = reportPenaltiesDTOCollection;
     }
+
+    @Data
+    public class TollDTO {
+        public Long tollId;
+        public LocationCheckpointDTO checkpointArrival;
+        public LocationCheckpointDTO checkpointExit;
+        public Integer mileageKm;
+        public Integer maxTimeMin;
+    }
+
+    @Data
+    public class LocationCheckpointDTO {
+        public Long locationId;
+        public String name;
+        public BigDecimal latitud;
+        public BigDecimal longitud;
+    }
+
     @Data
     public class CarFeaturesDTO {
         public Long carFeaturesId;
@@ -103,13 +135,7 @@ public class OneNumberPlateReportPenaltyResponseDTO {
         public LocalDateTime date;
 
         public Integer debtAmount;
-
+        public TollDTO toll;
         public Integer status;
-
-        public Integer mileage;
-
-        public String checkpointArrival;
-
-        public String checkpointExit;
     }
 }
