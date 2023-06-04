@@ -13,12 +13,9 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import javax.annotation.security.RolesAllowed;
 import java.net.URI;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.List;
 
 import static java.util.TimeZone.getTimeZone;
@@ -36,7 +33,7 @@ public class IncidentReportController {
     public ResponseEntity<?> getAllIncidentReports(@RequestParam("date") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date, @RequestParam("status") Integer status){
         try {
             LocalDateTime localDateTime = date.atStartOfDay();
-            List<IncidentReport> reportPenalties = reportPenaltyRepository.getIncidentReportsByDateAnAndStatus(localDateTime, status);
+            List<IncidentReport> reportPenalties = reportPenaltyRepository.findAllByDateGreaterThanEqualAndStatusEqualsOrderByDateDesc(localDateTime, status);
             List<IncidentReportResponseDTO> response = reportPenaltyService.getReportPenaltyResponseDTOList(reportPenalties);
             URI location = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/customers/get-all-incident-reports").toUriString());
             return ResponseEntity.created(location).body(response);

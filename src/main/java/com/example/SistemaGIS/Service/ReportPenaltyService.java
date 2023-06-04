@@ -22,7 +22,7 @@ public class ReportPenaltyService {
     private final TollRepository tollRepository;
 
     public ReportPenalty instanceReportPenalty(ReportPenaltyPostRequestDTO reportPenaltyData) {
-        CarFeatures existingCarFeatures = carFeaturesRepository.getCarFeaturesByNumberPlate(reportPenaltyData.getCarNumberPlate())
+        CarFeatures existingCarFeatures = carFeaturesRepository.findCarFeaturesByNumberPlate(reportPenaltyData.getCarNumberPlate())
                 .orElseThrow(() -> new RuntimeException("Características del vehículo no encontradas"));
 
         Toll existingToll = tollRepository.findTollByCheckpointArrivalNameAndCheckpointExitName(reportPenaltyData.checkpointArrivalName, reportPenaltyData.checkpointExitName)

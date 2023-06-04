@@ -1,10 +1,8 @@
 package com.example.SistemaGIS.Controller;
 
 import com.example.SistemaGIS.Model.*;
-import com.example.SistemaGIS.Repository.CarFeaturesRepository;
 import com.example.SistemaGIS.Repository.OwnerRepository;
 import com.example.SistemaGIS.Repository.ReportPenaltyRepository;
-import com.example.SistemaGIS.Repository.UserRepository;
 import com.example.SistemaGIS.Service.ReportPenaltyService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
