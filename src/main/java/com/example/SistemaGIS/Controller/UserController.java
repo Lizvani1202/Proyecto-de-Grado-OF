@@ -19,6 +19,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.sql.SQLException;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -35,7 +36,6 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping("/register")
-    @PreAuthorize("hasAnyAuthority('ROOT', 'SIS_ADMIN_ABC', 'SIS_POLICE')")
     public ResponseEntity<?> registerUser(@RequestBody UserRegisterRequestDTO userData, HttpServletRequest request) {
         try {
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -46,8 +46,8 @@ public class UserController {
             User user = userService.instanceUser(userData);
             if (roles.contains("SIS_ADMIN_ABC")){
                 userService.addRoleToUser(user, "ADMIN_ABC");
-            } else if (roles.contains("SIS_POLICE")){
-                userService.addRoleToUser(user, "POLICE");
+            } else if (roles.contains("SIS_POLICIA")){
+                userService.addRoleToUser(user, "POLICIA");
             } else {
                 userService.addRoleToUser(user, "USER");
             }
@@ -56,7 +56,7 @@ public class UserController {
             return ResponseEntity.ok(response);
         } catch (Exception e) {
             e.printStackTrace();
-            return ResponseEntity.status(500).body("Error interno del servidor");
+            return ResponseEntity.status(500).body(e.getMessage());
         }
     }
 

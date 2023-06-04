@@ -30,6 +30,9 @@ public class User implements UserDetails {
     @JoinColumn(name = "person_id")
     private Person person;
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private Collection<Owner> userOwner;
+
     @Column(name = "email")
     private String email;
 

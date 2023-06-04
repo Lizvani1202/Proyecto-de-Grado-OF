@@ -1,9 +1,6 @@
 package com.example.SistemaGIS.Service;
 
-import com.example.SistemaGIS.Model.Person;
-import com.example.SistemaGIS.Model.Role;
-import com.example.SistemaGIS.Model.User;
-import com.example.SistemaGIS.Model.UserRegisterRequestDTO;
+import com.example.SistemaGIS.Model.*;
 import com.example.SistemaGIS.Repository.RoleRepository;
 import com.example.SistemaGIS.Repository.UserRepository;
 import lombok.AllArgsConstructor;
@@ -14,6 +11,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.Optional;
 
 @Service
@@ -54,6 +52,12 @@ public class UserService implements UserDetailsService {
         person.setAddress(userData.getPerson().getAddress());
         person.setCity(userData.getPerson().getCity());
         user.setPerson(person);
+        Owner owner = new Owner();
+        owner.setStatus(userData.getStatus());
+        user.setUserOwner(new ArrayList<>());
+        user.getUserOwner().add(owner);
+        owner.setUser(user);
+        owner.setPerson(person);
         return user;
     }
 

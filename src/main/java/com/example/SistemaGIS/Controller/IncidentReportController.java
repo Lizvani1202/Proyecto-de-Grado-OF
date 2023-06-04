@@ -42,12 +42,11 @@ public class IncidentReportController {
             return ResponseEntity.created(location).body(response);
         } catch (Exception e){
             e.printStackTrace();
-            return ResponseEntity.status(500).body("Error interno del servidor");
+            return ResponseEntity.status(500).body(e.getMessage());
         }
     }
 
     @PostMapping("/add-incident-report")
-    @PreAuthorize("hasAnyAuthority('ROOT', 'SIS_ADMIN_ABC', 'ADMIN_ABC', 'USER')")
     public ResponseEntity<?> createIncidentReport(@RequestBody IncidentReportRequestDTO incidentReportData){
         try {
             IncidentReport incidentReport = reportPenaltyService.instanceIncidentReport(incidentReportData);
@@ -59,7 +58,7 @@ public class IncidentReportController {
             return ResponseEntity.created(location).body(response);
         } catch (Exception e){
             e.printStackTrace();
-            return ResponseEntity.status(500).body("Error interno del servidor");
+            return ResponseEntity.status(500).body(e.getMessage());
         }
     }
 }

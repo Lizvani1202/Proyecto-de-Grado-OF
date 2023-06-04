@@ -57,7 +57,7 @@ public class ReportPenaltiesController {
             return ResponseEntity.ok(response);
         } catch (Exception e){
             e.printStackTrace();
-            return ResponseEntity.status(500).body("Error interno del servidor");
+            return ResponseEntity.status(500).body(e.getMessage());
         }
     }
 
@@ -74,7 +74,7 @@ public class ReportPenaltiesController {
             return ResponseEntity.ok(response);
         } catch (Exception e){
             e.printStackTrace();
-            return ResponseEntity.status(500).body("Error interno del servidor");
+            return ResponseEntity.status(500).body(e.getMessage());
         }
     }
 
@@ -88,7 +88,7 @@ public class ReportPenaltiesController {
             return ResponseEntity.ok(response);
         } catch (Exception e){
             e.printStackTrace();
-            return ResponseEntity.status(500).body("Error interno del servidor");
+            return ResponseEntity.status(500).body(e.getMessage());
         }
     }
 }

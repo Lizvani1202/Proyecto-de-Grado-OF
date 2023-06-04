@@ -33,7 +33,8 @@ public class IncidenReportService {
     public IncidentReport instanceIncidentReport(IncidentReportRequestDTO incidentReportRequestDTO) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = (User) authentication.getPrincipal();
-        Owner owner = ownerRepository.findByUser(user).orElseThrow(() -> new RuntimeException("No se encontro el owner"));
+        Owner owner = ownerRepository.findByUser(user)
+                .orElseThrow(() -> new RuntimeException("No se encontro el usuario"));
 
         IncidentReport incidentReport = new IncidentReport();
         incidentReport.setUbicacion(incidentReportRequestDTO.getUbicacion());
