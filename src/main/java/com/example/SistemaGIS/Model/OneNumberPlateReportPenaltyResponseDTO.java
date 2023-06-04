@@ -25,6 +25,7 @@ public class OneNumberPlateReportPenaltyResponseDTO {
         carFeaturesDTO.setCarFeaturesId(carFeatures.getCarFeaturesId());
         carFeaturesDTO.setNumberPlate(carFeatures.getNumberPlate());
         carFeaturesDTO.setBrand(carFeatures.getBrand());
+        carFeaturesDTO.setRuat(carFeatures.getRuat());
         carFeaturesDTO.setPolicy(carFeatures.getPolicy());
         carFeaturesDTO.setCountry(carFeatures.getCountry());
         carFeaturesDTO.setTraction(carFeatures.getTraction());
@@ -98,6 +99,7 @@ public class OneNumberPlateReportPenaltyResponseDTO {
     public class CarFeaturesDTO {
         public Long carFeaturesId;
         public String numberPlate;
+        public String ruat;
         public String brand;
         public Integer policy;
         public Integer country;

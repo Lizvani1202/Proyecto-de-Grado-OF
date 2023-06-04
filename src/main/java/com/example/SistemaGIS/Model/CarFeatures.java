@@ -28,6 +28,9 @@ public class CarFeatures {
     @Column(name = "number_plate")
     private String numberPlate;
 
+    @Column(name = "ruat")
+    private String ruat;
+
     @Column(name = "brand")
     private String brand;
 

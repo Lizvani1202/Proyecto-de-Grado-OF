@@ -63,9 +63,9 @@ public class ReportPenaltiesController {
 
 
     @GetMapping("/get-report-penalties")
-    public ResponseEntity<?> getReportPenalties(@RequestParam("number_plate") String numberPlate, @RequestParam("status") Integer status){
+    public ResponseEntity<?> getReportPenalties(@RequestParam("number_plate") String numberPlate, @RequestParam("ruat") String ruat, @RequestParam("status") Integer status){
         try {
-            List<ReportPenalty> reportPenalties = reportPenaltyRepository.findAllByCarFeaturesNumberPlateAndStatusOrderByDateDesc(numberPlate, status);
+            List<ReportPenalty> reportPenalties = reportPenaltyRepository.findAllByCarFeaturesNumberPlateAndCarFeaturesRuatAndStatusOrderByDateDesc(numberPlate, ruat, status);
             Owner owner = ownerRepository.findAllByOwnerCarNumberPlate(numberPlate).orElseThrow(() -> new RuntimeException("Dueño no encontrado"));
             Collection<CarFeatures> carFeatures = owner.getOwnerCar();
             CarFeatures ownerCar = carFeatures.stream().filter(car -> car.getNumberPlate().equals(numberPlate)).findFirst()

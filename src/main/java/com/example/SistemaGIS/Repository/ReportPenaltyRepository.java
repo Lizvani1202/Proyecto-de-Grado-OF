@@ -19,14 +19,7 @@ import java.util.Optional;
 @Repository
 public interface ReportPenaltyRepository extends CrudRepository<ReportPenalty, Long> {
     Optional<ReportPenalty> findTop1ByCarFeaturesNumberPlateOrderByDateDesc(@Param("number_plate") String numberPlate);
-
-    @Query("SELECT rp " +
-            "FROM ReportPenalty rp " +
-            "INNER JOIN rp.carFeatures cf " +
-            "WHERE cf.numberPlate = :number_plate " +
-            "AND rp.status = :status " +
-            "ORDER BY rp.date DESC")
-    List<ReportPenalty> findAllByCarFeaturesNumberPlateAndStatusOrderByDateDesc(@Param("number_plate") String numberPlate, @Param("status") Integer status);
+    List<ReportPenalty> findAllByCarFeaturesNumberPlateAndCarFeaturesRuatAndStatusOrderByDateDesc(@Param("number_plate") String numberPlate, @Param("ruat") String ruat, @Param("status") Integer status);
 
     @Query("SELECT rp " +
             "FROM ReportPenalty rp " +
