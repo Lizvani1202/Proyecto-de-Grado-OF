@@ -20,14 +20,5 @@ import java.util.Optional;
 public interface ReportPenaltyRepository extends CrudRepository<ReportPenalty, Long> {
     Optional<ReportPenalty> findTop1ByCarFeaturesNumberPlateOrderByDateDesc(@Param("number_plate") String numberPlate);
     List<ReportPenalty> findAllByCarFeaturesNumberPlateAndCarFeaturesRuatAndStatusOrderByDateDesc(@Param("number_plate") String numberPlate, @Param("ruat") String ruat, @Param("status") Integer status);
-
-    @Query("SELECT rp " +
-            "FROM ReportPenalty rp " +
-            "INNER JOIN rp.carFeatures cf " +
-            "INNER JOIN cf.owner o " +
-            "INNER JOIN o.person p " +
-            "WHERE rp.date BETWEEN :date AND NOW() " +
-            "AND rp.status = :status " +
-            "ORDER BY rp.date DESC")
-    List<ReportPenalty> findAllByDateBetweenAndStatusOrderByDateDesc(@Param("date") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDateTime date, @Param("status") Integer status);
+    List<ReportPenalty> findAllByDateGreaterThanEqualAndStatusOrderByDateDesc(@Param("date") LocalDateTime date, @Param("status") Integer status);
 }

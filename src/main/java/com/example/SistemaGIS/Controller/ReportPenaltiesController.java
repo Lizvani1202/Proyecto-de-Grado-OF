@@ -83,7 +83,7 @@ public class ReportPenaltiesController {
     public ResponseEntity<?> getAllReportPenalties(@RequestParam("date") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date, @RequestParam("status") Integer status){
         try {
             LocalDateTime localDateTime = date.atStartOfDay();
-            List<ReportPenalty> reportPenalties = reportPenaltyRepository.findAllByDateBetweenAndStatusOrderByDateDesc(localDateTime, status);
+            List<ReportPenalty> reportPenalties = reportPenaltyRepository.findAllByDateGreaterThanEqualAndStatusOrderByDateDesc(localDateTime, status);
             List<ReportPenaltyResponseDTO> response = reportPenaltyService.getReportPenaltyResponseDTOList(reportPenalties);
             return ResponseEntity.ok(response);
         } catch (Exception e){
