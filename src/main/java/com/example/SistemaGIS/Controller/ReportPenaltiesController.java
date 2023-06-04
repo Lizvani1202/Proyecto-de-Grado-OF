@@ -1,27 +1,38 @@
 package com.example.SistemaGIS.Controller;
 
 import com.example.SistemaGIS.Model.*;
+import com.example.SistemaGIS.Repository.CarFeaturesRepository;
+import com.example.SistemaGIS.Repository.OwnerRepository;
 import com.example.SistemaGIS.Repository.ReportPenaltyRepository;
+import com.example.SistemaGIS.Repository.UserRepository;
 import com.example.SistemaGIS.Service.ReportPenaltyService;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
+@Slf4j
 @RestController
 @AllArgsConstructor
 @RequestMapping("/drivers")
 public class ReportPenaltiesController {
     private final ReportPenaltyRepository  reportPenaltyRepository;
     private final ReportPenaltyService reportPenaltyService;
+    private final UserRepository userRepository;
+    private final CarFeaturesRepository carFeaturesRepository;
+    private final OwnerRepository ownerRepository;
 
     @PostMapping("/add-report-penalty")
     @PreAuthorize("hasAnyAuthority('ROOT', 'SIS_POLICIA', 'POLICIA')")
@@ -56,11 +67,15 @@ public class ReportPenaltiesController {
     }
 
 
-    @GetMapping("/get-report-penalty")
+    @GetMapping("/get-report-penalties")
     public ResponseEntity<?> getReportPenalties(@RequestParam("number_plate") String numberPlate, @RequestParam("status") Integer status){
         try {
             List<ReportPenalty> reportPenalties = reportPenaltyRepository.findAllByCarFeaturesNumberPlateAndStatusOrderByDateDesc(numberPlate, status);
-            List<OneNumberPlateReportPenaltyResponseDTO> response = reportPenaltyService.getOneNumberPlateReportPenaltyResponseDTOList(reportPenalties);
+            Owner owner = ownerRepository.findAllByOwnerCarNumberPlate(numberPlate).orElseThrow(() -> new RuntimeException("Dueño no encontrado"));
+            Collection<CarFeatures> carFeatures = owner.getOwnerCar();
+            CarFeatures ownerCar = carFeatures.stream().filter(car -> car.getNumberPlate().equals(numberPlate)).findFirst()
+                    .orElseThrow(() -> new RuntimeException("Características del auto no encontradas"));
+            OneNumberPlateReportPenaltyResponseDTO response = new OneNumberPlateReportPenaltyResponseDTO(owner, ownerCar, reportPenalties);
             return ResponseEntity.ok(response);
         } catch (Exception e){
             e.printStackTrace();

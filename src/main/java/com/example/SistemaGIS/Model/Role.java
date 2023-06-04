@@ -1,5 +1,7 @@
 package com.example.SistemaGIS.Model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -25,6 +27,7 @@ public class Role {
     @Column(name = "status")
     private Integer status;
 
-    @ManyToMany(mappedBy = "userRoles")
+    @ManyToMany(mappedBy = "userRoles",fetch = FetchType.EAGER)
+    @JsonBackReference
     private Collection<User> users;
 }

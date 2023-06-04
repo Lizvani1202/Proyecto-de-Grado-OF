@@ -51,13 +51,4 @@ public class ReportPenaltyService {
         }
         return response;
     }
-
-    public List<OneNumberPlateReportPenaltyResponseDTO> getOneNumberPlateReportPenaltyResponseDTOList(List<ReportPenalty> reportPenalties) {
-        List<OneNumberPlateReportPenaltyResponseDTO> response = new ArrayList<>();
-        for (ReportPenalty reportPenalty : reportPenalties) {
-            OneNumberPlateReportPenaltyResponseDTO reportPenaltyResponseDTO = new OneNumberPlateReportPenaltyResponseDTO(reportPenalty);
-            response.add(reportPenaltyResponseDTO);
-        }
-        return response;
-    }
 }

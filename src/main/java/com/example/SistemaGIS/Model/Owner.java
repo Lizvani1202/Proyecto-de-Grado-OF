@@ -4,6 +4,7 @@ package com.example.SistemaGIS.Model;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.Collection;
 
 @Entity
 @Table(name="owner")
@@ -28,4 +29,7 @@ public class Owner {
 
     @Column(name = "status")
     private Integer status;
+
+    @OneToMany(mappedBy = "owner")
+    private Collection<CarFeatures> ownerCar;
 }

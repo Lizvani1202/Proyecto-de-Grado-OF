@@ -1,5 +1,7 @@
 package com.example.SistemaGIS.Model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -46,6 +48,7 @@ public class User implements UserDetails {
             joinColumns = @JoinColumn(name = "user_id",referencedColumnName = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id",referencedColumnName = "role_id")
     )
+    @JsonManagedReference
     private Collection<Role> userRoles = new HashSet<>();
 
     @Override
