@@ -1,9 +1,7 @@
 package com.example.SistemaGIS.Model;
 
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 
@@ -12,6 +10,8 @@ import javax.persistence.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
+@ToString(exclude = {"user", "person"})
+@EqualsAndHashCode(exclude = {"user", "person"})
 public class Owner {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

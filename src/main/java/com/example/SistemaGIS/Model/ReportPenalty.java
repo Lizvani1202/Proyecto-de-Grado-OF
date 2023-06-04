@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Entity
@@ -26,7 +27,7 @@ public class ReportPenalty {
 
     @Column(name = "date")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private Date date;
+    private LocalDateTime date;
 
     @Column(name = "debt_amount")
     private Integer debtAmount;

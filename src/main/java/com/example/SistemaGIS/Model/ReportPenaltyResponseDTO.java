@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 
@@ -17,7 +19,7 @@ public class ReportPenaltyResponseDTO {
     public CarFeaturesDTO carFeatures;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    public Date date;
+    public LocalDateTime date;
 
     public Integer debtAmount;
     public OwnerDTO owner;
@@ -87,7 +89,7 @@ public class ReportPenaltyResponseDTO {
         public String SecondSurname;
 
         @JsonFormat(pattern = "yyyy-MM-dd")
-        public Date BirthDate;
+        public LocalDate BirthDate;
 
         public String Address;
         public String City;

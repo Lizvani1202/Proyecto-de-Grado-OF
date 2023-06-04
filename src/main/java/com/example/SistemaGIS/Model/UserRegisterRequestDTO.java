@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 
@@ -32,7 +33,7 @@ public class UserRegisterRequestDTO {
         private String secondSurname;
 
         @JsonFormat(pattern = "yyyy-MM-dd")
-        private Date birthDate;
+        private LocalDate birthDate;
 
         private String address;
 

@@ -5,8 +5,12 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Entity
@@ -36,9 +40,10 @@ public class IncidentReport {
 
     @Column(name = "date")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private Date date;
+    private LocalDateTime date;
 
-    @Column(name = "type")
-    private String type;
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "type_incident_report_id")
+    private TypeIncidentReport typeIncidentReport;
 
 }

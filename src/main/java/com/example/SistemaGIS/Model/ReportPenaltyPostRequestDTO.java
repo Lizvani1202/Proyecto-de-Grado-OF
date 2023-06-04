@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.sql.Date;
+import java.time.LocalDateTime;
 
 
 @Data
@@ -16,7 +17,7 @@ public class ReportPenaltyPostRequestDTO {
     public String carNumberPlate;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    public Date date;
+    public LocalDateTime date;
 
     public Integer mileage;
 

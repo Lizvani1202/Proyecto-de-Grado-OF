@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
@@ -57,7 +58,7 @@ public class UserRegisterResponseDTO {
         private String secondSurname;
 
         @JsonFormat(pattern = "yyyy-MM-dd")
-        private Date birthDate;
+        private LocalDate birthDate;
 
         private String address;
 

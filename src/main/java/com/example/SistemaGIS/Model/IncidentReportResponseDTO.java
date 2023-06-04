@@ -6,6 +6,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 
@@ -24,7 +26,7 @@ public class IncidentReportResponseDTO {
     public Integer status;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    public Date date;
+    public LocalDateTime date;
 
     public String type;
 
@@ -49,7 +51,7 @@ public class IncidentReportResponseDTO {
         this.ubicacion = incidentReport.getUbicacion();
         this.status = incidentReport.getStatus();
         this.date = incidentReport.getDate();
-        this.type = incidentReport.getType();
+        this.type = incidentReport.getTypeIncidentReport().getName();
     }
 
     class personDTO {
@@ -59,7 +61,7 @@ public class IncidentReportResponseDTO {
         public String secondSurname;
 
         @JsonFormat(pattern = "yyyy-MM-dd")
-        public Date birthDate;
+        public LocalDate birthDate;
 
         public String address;
         public String city;

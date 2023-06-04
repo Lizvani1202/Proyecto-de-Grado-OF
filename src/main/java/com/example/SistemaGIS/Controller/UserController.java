@@ -49,7 +49,7 @@ public class UserController {
             } else if (roles.contains("SIS_POLICE")){
                 userService.addRoleToUser(user, "POLICE");
             } else {
-                userService.addRoleToUser(user, "DRIVER");
+                userService.addRoleToUser(user, "USER");
             }
             User savedUser = userService.saveUser(user).orElseThrow(()-> new Exception("Error al guardar usuario"));
             UserRegisterResponseDTO response = new UserRegisterResponseDTO(savedUser);

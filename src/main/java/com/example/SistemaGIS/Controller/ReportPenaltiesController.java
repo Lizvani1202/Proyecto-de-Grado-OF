@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 
@@ -68,11 +70,12 @@ public class ReportPenaltiesController {
 
     @GetMapping("/get-all-report-penalties")
     @PreAuthorize("hasAnyAuthority('ROOT', 'SIS_POLICIA', 'POLICIA')")
-    public ResponseEntity<?> getAllReportPenalties(@RequestParam("date") @DateTimeFormat(pattern = "yyyy-MM-dd") Date date, @RequestParam("status") Integer status){
+    public ResponseEntity<?> getAllReportPenalties(@RequestParam("date") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date, @RequestParam("status") Integer status){
         try {
-            List<ReportPenalty> reportPenalties = reportPenaltyRepository.findAllByDateBetweenAndStatusOrderByDateDesc(date, status);
+            LocalDateTime localDateTime = date.atStartOfDay();
+            List<ReportPenalty> reportPenalties = reportPenaltyRepository.findAllByDateBetweenAndStatusOrderByDateDesc(localDateTime, status);
             List<ReportPenaltyResponseDTO> response = reportPenaltyService.getReportPenaltyResponseDTOList(reportPenalties);
-            return ResponseEntity.ok(reportPenalties);
+            return ResponseEntity.ok(response);
         } catch (Exception e){
             e.printStackTrace();
             return ResponseEntity.status(500).body("Error interno del servidor");

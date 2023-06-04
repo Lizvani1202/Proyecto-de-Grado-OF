@@ -9,6 +9,8 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 
@@ -23,5 +25,5 @@ public interface IncidentReportRepository extends JpaRepository<IncidentReport, 
             "WHERE ir.date BETWEEN :date AND NOW() " +
             "AND ir.status = :status " +
             "ORDER BY ir.date DESC")
-    List<IncidentReport> getIncidentReportsByDateAnAndStatus(@Param("date") @DateTimeFormat(pattern = "yyyy-MM-dd") Date date, @Param("status") Integer status);
+    List<IncidentReport> getIncidentReportsByDateAnAndStatus(@Param("date") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDateTime date, @Param("status") Integer status);
 }
