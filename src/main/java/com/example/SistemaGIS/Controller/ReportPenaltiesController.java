@@ -11,8 +11,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -20,7 +18,6 @@ import java.net.URI;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Collection;
-import java.util.Date;
 import java.util.List;
 
 @Slf4j
@@ -30,8 +27,6 @@ import java.util.List;
 public class ReportPenaltiesController {
     private final ReportPenaltyRepository  reportPenaltyRepository;
     private final ReportPenaltyService reportPenaltyService;
-    private final UserRepository userRepository;
-    private final CarFeaturesRepository carFeaturesRepository;
     private final OwnerRepository ownerRepository;
 
     @PostMapping("/add-report-penalty")
@@ -46,7 +41,7 @@ public class ReportPenaltiesController {
             return ResponseEntity.created(location).body(response);
         } catch (Exception e){
             e.printStackTrace();
-            return ResponseEntity.status(500).body("Error interno del servidor");
+            return ResponseEntity.status(500).body(e.getMessage());
         }
     }
 

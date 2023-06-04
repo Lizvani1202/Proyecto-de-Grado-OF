@@ -16,12 +16,7 @@ public class ReportPenaltyPostRequestDTO {
 
     public String carNumberPlate;
 
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    public LocalDateTime date;
+    public String checkpointArrivalName;
 
-    public Integer mileage;
-
-    public String checkpointArrival;
-
-    public String checkpointExit;
+    public String checkpointExitName;
 }
