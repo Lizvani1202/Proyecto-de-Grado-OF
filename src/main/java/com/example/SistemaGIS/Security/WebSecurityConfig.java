@@ -15,6 +15,9 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
 
@@ -35,7 +38,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity httpSecurity) throws Exception {
         CustomJWTAuthenticationFilter customJWTAuthenticationFilter = new CustomJWTAuthenticationFilter(authenticationManagerBean());
         customJWTAuthenticationFilter.setFilterProcessesUrl("/users/login");
-        httpSecurity.csrf().disable();
+        httpSecurity.cors().and().csrf().disable();
         httpSecurity.authorizeRequests().antMatchers("/users/login/**", "/users/register/**", "/drivers/get-report-penalties/**", "/users/refresh-token/**").permitAll();
         httpSecurity.httpBasic().authenticationEntryPoint(basicAuthenticationEntryPoint);
         httpSecurity.authorizeRequests().anyRequest().authenticated();
@@ -43,6 +46,22 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         httpSecurity.sessionManagement().sessionCreationPolicy(STATELESS);
         httpSecurity.addFilterBefore(new CustomJWTAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class);
     }
+
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.addAllowedOriginPattern("*");
+        configuration.addAllowedMethod("*");
+        configuration.addAllowedHeader("Content-Type");
+        configuration.addAllowedHeader("Authorization");
+        configuration.setAllowCredentials(true);
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+
+        return source;
+    }
+
 
     @Bean
     @Override
