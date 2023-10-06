@@ -1,5 +1,6 @@
 package com.example.SistemaGIS.Controller;
 
+import com.example.SistemaGIS.Exceptions.DoubleReportException;
 import com.example.SistemaGIS.Model.*;
 import com.example.SistemaGIS.Repository.OwnerRepository;
 import com.example.SistemaGIS.Repository.ReportPenaltyRepository;

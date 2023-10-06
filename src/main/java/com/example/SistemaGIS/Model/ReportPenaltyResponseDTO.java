@@ -73,7 +73,8 @@ public class ReportPenaltyResponseDTO {
         checkpointExitDTO.longitud = reportPenalty.getToll().getCheckpointExit().getLongitud();
         tollDTO.setCheckpointExit(checkpointExitDTO);
         tollDTO.setMileageKm(reportPenalty.getToll().getMileageKm());
-        tollDTO.setMaxSpeedKmH(reportPenalty.getToll().getMaxSpeedKmH());
+        tollDTO.setPrivateCarMaxSpeedKmH(reportPenalty.getToll().getPrivateCarMaxSpeedKmH());
+        tollDTO.setPublicServCarMaxSpeedKmH(reportPenalty.getToll().getPublicServCarMaxSpeedKmH());
         this.setToll(tollDTO);
     }
 
@@ -83,7 +84,8 @@ public class ReportPenaltyResponseDTO {
         public LocationCheckpointDTO checkpointArrival;
         public LocationCheckpointDTO checkpointExit;
         public Integer mileageKm;
-        public Integer maxSpeedKmH;
+        public Integer privateCarMaxSpeedKmH;
+        public Integer publicServCarMaxSpeedKmH;
     }
 
     @Data
@@ -104,7 +106,7 @@ public class ReportPenaltyResponseDTO {
         public Integer country;
         public String traction;
         public String color;
-        public String type;
+        public CarFeatures.Type type;
         public String model;
         public String service;
         public String filling;

@@ -47,7 +47,8 @@ public class CarFeatures {
     private String color;
 
     @Column(name = "type")
-    private String type;
+    @Enumerated(EnumType.STRING)
+    private Type type;
 
     @Column(name = "model")
     private String model;
@@ -60,4 +61,9 @@ public class CarFeatures {
 
     @Column(name = "status")
     private Integer status;
+
+    public enum Type {
+        PARTICULAR,
+        VEHICULO_DE_TRANSPORTE_PUBLICO
+    }
 }
