@@ -30,8 +30,8 @@ public class Toll {
     @Column(name = "mileage_km")
     private Integer mileageKm;
 
-    @Column(name = "max_time_min")
-    private Integer maxTimeMin;
+    @Column(name = "max_speed_km_h")
+    private Integer maxSpeedKmH;
 
     @OneToMany(mappedBy = "toll")
     private Collection<ReportPenalty> reportPenalties;

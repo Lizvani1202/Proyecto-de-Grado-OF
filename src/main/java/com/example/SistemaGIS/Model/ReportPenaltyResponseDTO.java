@@ -73,7 +73,7 @@ public class ReportPenaltyResponseDTO {
         checkpointExitDTO.longitud = reportPenalty.getToll().getCheckpointExit().getLongitud();
         tollDTO.setCheckpointExit(checkpointExitDTO);
         tollDTO.setMileageKm(reportPenalty.getToll().getMileageKm());
-        tollDTO.setMaxTimeMin(reportPenalty.getToll().getMaxTimeMin());
+        tollDTO.setMaxSpeedKmH(reportPenalty.getToll().getMaxSpeedKmH());
         this.setToll(tollDTO);
     }
 
@@ -83,7 +83,7 @@ public class ReportPenaltyResponseDTO {
         public LocationCheckpointDTO checkpointArrival;
         public LocationCheckpointDTO checkpointExit;
         public Integer mileageKm;
-        public Integer maxTimeMin;
+        public Integer maxSpeedKmH;
     }
 
     @Data

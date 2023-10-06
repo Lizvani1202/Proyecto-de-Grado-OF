@@ -45,8 +45,11 @@ public class ReportPenaltyService {
                         Long currentReportArrivalCheckpointId = reportPenalty.getToll().getCheckpointArrival().getLocationId();
                         if (lastReportExitCheckpointId.equals(currentReportArrivalCheckpointId)) {
                             Integer differenceInMinutes = Utils.differenceInMinutes(lastReportPenalty.getDate(), reportPenalty.getDate());
-                            Integer maxTimeMin = reportPenalty.getToll().getMaxTimeMin();
-                            if (differenceInMinutes < maxTimeMin) {
+                            Integer distance = reportPenalty.getToll().getMileageKm();
+                            Integer maxSpeedKmH = reportPenalty.getToll().getMaxSpeedKmH();
+                            Integer currentSpeedKmH = Utils.calcSpeedKmH(differenceInMinutes, distance);
+//                            log.info("differenceInMinutes: " + differenceInMinutes + " distance: " + distance + " maxSpeedKmH: " + maxSpeedKmH + " currentSpeedKmH: " + currentSpeedKmH);
+                            if (currentSpeedKmH > maxSpeedKmH) {
                                 reportPenalty.setDebtAmount(200);
                                 reportPenalty.setStatus(1);
                             }

@@ -36,8 +36,6 @@ public class CustomJWTAuthenticationFilter extends UsernamePasswordAuthenticatio
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
         String email = request.getParameter("email");
         String password = request.getParameter("password");
-        log.info("Email is: {}", email);
-        log.info("Password is: {}", password);
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(email, password);
         return authenticationManager.authenticate(authenticationToken);
     }
@@ -72,7 +70,6 @@ public class CustomJWTAuthenticationFilter extends UsernamePasswordAuthenticatio
 
     @Override
     protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) throws IOException, ServletException {
-        log.error("Error en el método unsuccessfulAuthentication");
         log.error("Error: {}", failed.getMessage());
         response.setStatus(401);
         response.setContentType(APPLICATION_JSON_VALUE);
