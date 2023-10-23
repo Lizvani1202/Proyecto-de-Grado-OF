@@ -27,8 +27,16 @@ public class ReportPenaltyService {
         CarFeatures existingCarFeatures = carFeaturesRepository.findCarFeaturesByNumberPlate(reportPenaltyData.getCarNumberPlate())
                 .orElseThrow(() -> new RuntimeException("Características del vehículo no encontradas"));
 
-        Toll existingToll = tollRepository.findTollByCheckpointArrivalNameAndCheckpointExitName(reportPenaltyData.checkpointArrivalName, reportPenaltyData.checkpointExitName)
-                .orElseThrow(() -> new RuntimeException("Relacion entre puntos de control no encontrada"));
+        Toll existingToll;
+        if (reportPenaltyData.checkpointArrivalName != null && reportPenaltyData.checkpointExitName != null) {
+            existingToll = tollRepository.findTollByCheckpointArrivalNameAndCheckpointExitName(reportPenaltyData.checkpointArrivalName, reportPenaltyData.checkpointExitName)
+                    .orElseThrow(() -> new RuntimeException("Relacion entre puntos de control no encontrada"));
+        } else if (reportPenaltyData.checkpointExitName != null) {
+            existingToll = tollRepository.findTollByCheckpointArrivalIsNullAndCheckpointExitName(reportPenaltyData.checkpointExitName)
+                    .orElseThrow(() -> new RuntimeException("Punto de control de salida no encontrado"));
+        } else{
+            throw new RuntimeException("Punto de control de salida no puede estar vacio");
+        }
 
         ReportPenalty reportPenalty = new ReportPenalty();
         reportPenalty.setCarFeatures(existingCarFeatures);
@@ -44,6 +52,10 @@ public class ReportPenaltyService {
         AtomicBoolean shouldThrowException = new AtomicBoolean(false);
         reportPenaltyRepository.findTop1ByCarFeaturesNumberPlateOrderByDateDesc(reportPenalty.getCarFeatures().getNumberPlate())
                 .ifPresent(lastReportPenalty -> {
+                        if (reportPenalty.getToll().getCheckpointArrival() == null) {
+                            return;
+                        }
+
                         Long lastReportExitCheckpointId = lastReportPenalty.getToll().getCheckpointExit().getLocationId();
                         Long currentReportArrivalCheckpointId = reportPenalty.getToll().getCheckpointArrival().getLocationId();
 

@@ -11,4 +11,6 @@ import java.util.Optional;
 @Repository
 public interface TollRepository extends JpaRepository<Toll, Long> {
     Optional<Toll> findTollByCheckpointArrivalNameAndCheckpointExitName(@Param("checkpoint_arrival_name") String checkpointArrivalName, @Param("checkpoint_exit_name") String checkpointExitName);
+
+    Optional<Toll> findTollByCheckpointArrivalIsNullAndCheckpointExitName(@Param("checkpoint_exit_name") String checkpointExitName);
 }

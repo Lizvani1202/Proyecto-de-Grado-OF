@@ -60,12 +60,14 @@ public class ReportPenaltyResponseDTO {
         this.setOwner(ownerDTO);
         TollDTO tollDTO = new TollDTO();
         tollDTO.tollId = reportPenalty.getToll().getTollId();
-        LocationCheckpointDTO checkpointArrivalDTO = new LocationCheckpointDTO();
-        checkpointArrivalDTO.locationId = reportPenalty.getToll().getCheckpointArrival().getLocationId();
-        checkpointArrivalDTO.name = reportPenalty.getToll().getCheckpointArrival().getName();
-        checkpointArrivalDTO.latitud = reportPenalty.getToll().getCheckpointArrival().getLatitud();
-        checkpointArrivalDTO.longitud = reportPenalty.getToll().getCheckpointArrival().getLongitud();
-        tollDTO.setCheckpointArrival(checkpointArrivalDTO);
+        if (reportPenalty.getToll().getCheckpointArrival() != null) {
+            LocationCheckpointDTO checkpointArrivalDTO = new LocationCheckpointDTO();
+            checkpointArrivalDTO.locationId = reportPenalty.getToll().getCheckpointArrival().getLocationId();
+            checkpointArrivalDTO.name = reportPenalty.getToll().getCheckpointArrival().getName();
+            checkpointArrivalDTO.latitud = reportPenalty.getToll().getCheckpointArrival().getLatitud();
+            checkpointArrivalDTO.longitud = reportPenalty.getToll().getCheckpointArrival().getLongitud();
+            tollDTO.setCheckpointArrival(checkpointArrivalDTO);
+        }
         LocationCheckpointDTO checkpointExitDTO = new LocationCheckpointDTO();
         checkpointExitDTO.locationId = reportPenalty.getToll().getCheckpointExit().getLocationId();
         checkpointExitDTO.name = reportPenalty.getToll().getCheckpointExit().getName();
