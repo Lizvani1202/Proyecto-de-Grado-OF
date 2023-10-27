@@ -3,6 +3,7 @@ package com.example.SistemaGIS.Service;
 import com.example.SistemaGIS.Exceptions.DoubleReportException;
 import com.example.SistemaGIS.Model.*;
 import com.example.SistemaGIS.Repository.CarFeaturesRepository;
+import com.example.SistemaGIS.Repository.LocationCheckpointRepository;
 import com.example.SistemaGIS.Repository.ReportPenaltyRepository;
 import com.example.SistemaGIS.Repository.TollRepository;
 import com.example.SistemaGIS.Utils.Utils;
@@ -22,20 +23,22 @@ public class ReportPenaltyService {
     private final CarFeaturesRepository carFeaturesRepository;
     private final ReportPenaltyRepository reportPenaltyRepository;
     private final TollRepository tollRepository;
+    private final LocationCheckpointRepository locationCheckpointRepository;
 
     public ReportPenalty instanceReportPenalty(ReportPenaltyPostRequestDTO reportPenaltyData) {
         CarFeatures existingCarFeatures = carFeaturesRepository.findCarFeaturesByNumberPlate(reportPenaltyData.getCarNumberPlate())
                 .orElseThrow(() -> new RuntimeException("Características del vehículo no encontradas"));
 
-        Toll existingToll;
-        if (reportPenaltyData.checkpointArrivalName != null && reportPenaltyData.checkpointExitName != null) {
-            existingToll = tollRepository.findTollByCheckpointArrivalNameAndCheckpointExitName(reportPenaltyData.checkpointArrivalName, reportPenaltyData.checkpointExitName)
-                    .orElseThrow(() -> new RuntimeException("Relacion entre puntos de control no encontrada"));
-        } else if (reportPenaltyData.checkpointExitName != null) {
-            existingToll = tollRepository.findTollByCheckpointArrivalIsNullAndCheckpointExitName(reportPenaltyData.checkpointExitName)
-                    .orElseThrow(() -> new RuntimeException("Punto de control de salida no encontrado"));
-        } else{
-            throw new RuntimeException("Punto de control de salida no puede estar vacio");
+        LocationCheckpoint locationCheckpoint = locationCheckpointRepository.getLocationCheckpointByName(reportPenaltyData.getCheckpointExitName())
+                .orElseThrow(() -> new RuntimeException("Peaje de salida no encontrado"));
+
+        ReportPenalty lastReportPenalty = reportPenaltyRepository.findTop1ByCarFeaturesNumberPlateOrderByDateDesc(reportPenaltyData.getCarNumberPlate())
+                .orElse(null);
+
+        Toll existingToll = null;
+        if (lastReportPenalty != null && lastReportPenalty.getLocationCheckpoint() != null) {
+            existingToll = tollRepository.findTollByCheckpointArrivalNameAndCheckpointExitName(lastReportPenalty.getLocationCheckpoint().getName(), locationCheckpoint.getName())
+                    .orElse(null);
         }
 
         ReportPenalty reportPenalty = new ReportPenalty();
@@ -43,6 +46,7 @@ public class ReportPenaltyService {
         reportPenalty.setOwner(existingCarFeatures.getOwner());
         reportPenalty.setDebtAmount(0);
         reportPenalty.setDate(LocalDateTime.now());
+        reportPenalty.setLocationCheckpoint(locationCheckpoint);
         reportPenalty.setToll(existingToll);
         reportPenalty.setStatus(0);
         return reportPenalty;
@@ -50,20 +54,19 @@ public class ReportPenaltyService {
 
     public ReportPenalty calcDebtAmount(ReportPenalty reportPenalty) throws DoubleReportException {
         AtomicBoolean shouldThrowException = new AtomicBoolean(false);
+
         reportPenaltyRepository.findTop1ByCarFeaturesNumberPlateOrderByDateDesc(reportPenalty.getCarFeatures().getNumberPlate())
                 .ifPresent(lastReportPenalty -> {
-                        if (reportPenalty.getToll().getCheckpointArrival() == null) {
-                            return;
-                        }
 
-                        Long lastReportExitCheckpointId = lastReportPenalty.getToll().getCheckpointExit().getLocationId();
-                        Long currentReportArrivalCheckpointId = reportPenalty.getToll().getCheckpointArrival().getLocationId();
+                        Long lastReportExitCheckpointId = lastReportPenalty.getLocationCheckpoint().getLocationId();
+                        Long currentReportArrivalCheckpointId = reportPenalty.getLocationCheckpoint().getLocationId();
 
-                        if(lastReportPenalty.getToll().getTollId().equals(reportPenalty.getToll().getTollId()) && Utils.differenceInMinutes(lastReportPenalty.getDate(), reportPenalty.getDate()) < 1){
+                        if(lastReportExitCheckpointId.equals(currentReportArrivalCheckpointId) && Utils.differenceInMinutes(lastReportPenalty.getDate(), reportPenalty.getDate()) < 1){
                             shouldThrowException.set(true);
                             return;
                         }
-                        if (lastReportExitCheckpointId.equals(currentReportArrivalCheckpointId)) {
+
+                        if (reportPenalty.getToll() != null && !lastReportExitCheckpointId.equals(currentReportArrivalCheckpointId)) {
                             Integer differenceInMinutes = Utils.differenceInMinutes(lastReportPenalty.getDate(), reportPenalty.getDate());
                             Integer distance = reportPenalty.getToll().getMileageKm();
                             Integer maxSpeedKmH = getMaxSpeedFromCarType(reportPenalty);
@@ -76,7 +79,7 @@ public class ReportPenaltyService {
                         }
                 });
         if(shouldThrowException.get()){
-            throw new DoubleReportException("No se puede reportar dos veces en el mismo peaje en menos de un minuto");
+            throw new DoubleReportException("No se puede reportar dos veces en el mismo punto de control en menos de un minuto");
         }
         return reportPenalty;
     }

@@ -21,6 +21,7 @@ public class ReportPenaltyResponseDTO {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     public LocalDateTime date;
     public Integer debtAmount;
+    public LocationCheckpointDTO locationCheckpoint;
     public TollDTO toll;
     public Integer status;
 
@@ -58,26 +59,35 @@ public class ReportPenaltyResponseDTO {
         personDTO.setCity(reportPenalty.getOwner().getPerson().getCity());
         ownerDTO.setPerson(personDTO);
         this.setOwner(ownerDTO);
-        TollDTO tollDTO = new TollDTO();
-        tollDTO.tollId = reportPenalty.getToll().getTollId();
-        if (reportPenalty.getToll().getCheckpointArrival() != null) {
+        LocationCheckpointDTO locationCheckpointDTO = new LocationCheckpointDTO();
+        locationCheckpointDTO.setLocationId(reportPenalty.getLocationCheckpoint().getLocationId());
+        locationCheckpointDTO.setName(reportPenalty.getLocationCheckpoint().getName());
+        locationCheckpointDTO.setLatitud(reportPenalty.getLocationCheckpoint().getLatitud());
+        locationCheckpointDTO.setLongitud(reportPenalty.getLocationCheckpoint().getLongitud());
+        this.setLocationCheckpoint(locationCheckpointDTO);
+        if (reportPenalty.getToll() != null) {
+            TollDTO tollDTO = new TollDTO();
+            tollDTO.tollId = reportPenalty.getToll().getTollId();
+
             LocationCheckpointDTO checkpointArrivalDTO = new LocationCheckpointDTO();
             checkpointArrivalDTO.locationId = reportPenalty.getToll().getCheckpointArrival().getLocationId();
             checkpointArrivalDTO.name = reportPenalty.getToll().getCheckpointArrival().getName();
             checkpointArrivalDTO.latitud = reportPenalty.getToll().getCheckpointArrival().getLatitud();
             checkpointArrivalDTO.longitud = reportPenalty.getToll().getCheckpointArrival().getLongitud();
             tollDTO.setCheckpointArrival(checkpointArrivalDTO);
+
+            LocationCheckpointDTO checkpointExitDTO = new LocationCheckpointDTO();
+            checkpointExitDTO.locationId = reportPenalty.getToll().getCheckpointExit().getLocationId();
+            checkpointExitDTO.name = reportPenalty.getToll().getCheckpointExit().getName();
+            checkpointExitDTO.latitud = reportPenalty.getToll().getCheckpointExit().getLatitud();
+            checkpointExitDTO.longitud = reportPenalty.getToll().getCheckpointExit().getLongitud();
+
+            tollDTO.setCheckpointExit(checkpointExitDTO);
+            tollDTO.setMileageKm(reportPenalty.getToll().getMileageKm());
+            tollDTO.setPrivateCarMaxSpeedKmH(reportPenalty.getToll().getPrivateCarMaxSpeedKmH());
+            tollDTO.setPublicServCarMaxSpeedKmH(reportPenalty.getToll().getPublicServCarMaxSpeedKmH());
+            this.setToll(tollDTO);
         }
-        LocationCheckpointDTO checkpointExitDTO = new LocationCheckpointDTO();
-        checkpointExitDTO.locationId = reportPenalty.getToll().getCheckpointExit().getLocationId();
-        checkpointExitDTO.name = reportPenalty.getToll().getCheckpointExit().getName();
-        checkpointExitDTO.latitud = reportPenalty.getToll().getCheckpointExit().getLatitud();
-        checkpointExitDTO.longitud = reportPenalty.getToll().getCheckpointExit().getLongitud();
-        tollDTO.setCheckpointExit(checkpointExitDTO);
-        tollDTO.setMileageKm(reportPenalty.getToll().getMileageKm());
-        tollDTO.setPrivateCarMaxSpeedKmH(reportPenalty.getToll().getPrivateCarMaxSpeedKmH());
-        tollDTO.setPublicServCarMaxSpeedKmH(reportPenalty.getToll().getPublicServCarMaxSpeedKmH());
-        this.setToll(tollDTO);
     }
 
     @Data

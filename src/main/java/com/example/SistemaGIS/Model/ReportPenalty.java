@@ -36,6 +36,10 @@ public class ReportPenalty {
     private Integer debtAmount;
 
     @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "location_checkpoint_id")
+    private LocationCheckpoint locationCheckpoint;
+
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "toll_id")
     private Toll toll;
 

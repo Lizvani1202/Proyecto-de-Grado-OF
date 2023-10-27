@@ -12,7 +12,5 @@ public class ReportPenaltyPostRequestDTO {
 
     public String carNumberPlate;
 
-    public String checkpointArrivalName;
-
     public String checkpointExitName;
 }
