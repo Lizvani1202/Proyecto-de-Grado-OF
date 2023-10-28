@@ -1,9 +1,8 @@
 package com.example.SistemaGIS.Model;
 
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.*;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -14,6 +13,8 @@ import java.util.Collection;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
+@ToString(exclude = {"tollsArrival", "tollsExit"})
+@EqualsAndHashCode(exclude = {"tollsArrival", "tollsExit"})
 public class LocationCheckpoint {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,8 +31,10 @@ public class LocationCheckpoint {
     private BigDecimal longitud;
 
     @OneToMany(mappedBy = "checkpointArrival")
+    @JsonIgnore
     private Collection<Toll> tollsArrival;
 
     @OneToMany(mappedBy = "checkpointExit")
+    @JsonIgnore
     private Collection<Toll> tollsExit;
 }

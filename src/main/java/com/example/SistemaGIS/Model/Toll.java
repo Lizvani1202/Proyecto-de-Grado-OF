@@ -1,8 +1,6 @@
 package com.example.SistemaGIS.Model;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.Collection;
@@ -12,6 +10,8 @@ import java.util.Collection;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
+@ToString(exclude = {"checkpointArrival", "checkpointExit", "reportPenalties"})
+@EqualsAndHashCode(exclude = {"checkpointArrival", "checkpointExit", "reportPenalties"})
 public class Toll {
 
     @Id
