@@ -71,6 +71,7 @@ public class ReportPenaltyService {
                             Integer distance = reportPenalty.getToll().getMileageKm();
                             Integer maxSpeedKmH = getMaxSpeedFromCarType(reportPenalty);
                             Integer currentSpeedKmH = Utils.calcSpeedKmH(differenceInMinutes, distance);
+                            reportPenalty.setCurrentSpeedKmH(currentSpeedKmH);
 //                            log.info("differenceInMinutes: " + differenceInMinutes + " distance: " + distance + " maxSpeedKmH: " + maxSpeedKmH + " currentSpeedKmH: " + currentSpeedKmH);
                             if (currentSpeedKmH > maxSpeedKmH) {
                                 reportPenalty.setDebtAmount(200);

@@ -32,6 +32,9 @@ public class ReportPenalty {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime date;
 
+    @Column(name = "current_speed_km_h")
+    private Integer currentSpeedKmH;
+
     @Column(name = "debt_amount")
     private Integer debtAmount;
 

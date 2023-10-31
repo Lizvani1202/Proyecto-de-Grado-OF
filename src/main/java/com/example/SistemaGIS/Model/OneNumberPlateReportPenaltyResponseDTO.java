@@ -56,26 +56,29 @@ public class OneNumberPlateReportPenaltyResponseDTO {
             ReportPenaltiesDTO reportPenaltiesDTO = new ReportPenaltiesDTO();
             reportPenaltiesDTO.setReportPenaltyId(reportPenalty.getReportPenaltyId());
             reportPenaltiesDTO.setDate(reportPenalty.getDate());
+            reportPenaltiesDTO.setCurrentSpeedKmH(reportPenalty.getCurrentSpeedKmH());
             reportPenaltiesDTO.setDebtAmount(reportPenalty.getDebtAmount());
             reportPenaltiesDTO.setStatus(reportPenalty.getStatus());
-            TollDTO tollDTO = new TollDTO();
-            tollDTO.setTollId(reportPenalty.getToll().getTollId());
-            LocationCheckpointDTO checkpointArrivalDTO = new LocationCheckpointDTO();
-            checkpointArrivalDTO.setLocationId(reportPenalty.getToll().getCheckpointArrival().getLocationId());
-            checkpointArrivalDTO.setName(reportPenalty.getToll().getCheckpointArrival().getName());
-            checkpointArrivalDTO.setLatitud(reportPenalty.getToll().getCheckpointArrival().getLatitud());
-            checkpointArrivalDTO.setLongitud(reportPenalty.getToll().getCheckpointArrival().getLongitud());
-            LocationCheckpointDTO checkpointExitDTO = new LocationCheckpointDTO();
-            checkpointExitDTO.setLocationId(reportPenalty.getToll().getCheckpointExit().getLocationId());
-            checkpointExitDTO.setName(reportPenalty.getToll().getCheckpointExit().getName());
-            checkpointExitDTO.setLatitud(reportPenalty.getToll().getCheckpointExit().getLatitud());
-            checkpointExitDTO.setLongitud(reportPenalty.getToll().getCheckpointExit().getLongitud());
-            tollDTO.setCheckpointArrival(checkpointArrivalDTO);
-            tollDTO.setCheckpointExit(checkpointExitDTO);
-            tollDTO.setMileageKm(reportPenalty.getToll().getMileageKm());
-            tollDTO.setPrivateCarMaxSpeedKmH(reportPenalty.getToll().getPrivateCarMaxSpeedKmH());
-            tollDTO.setPublicServCarMaxSpeedKmH(reportPenalty.getToll().getPublicServCarMaxSpeedKmH());
-            reportPenaltiesDTO.setToll(tollDTO);
+            if (reportPenalty.getToll() != null) {
+                TollDTO tollDTO = new TollDTO();
+                tollDTO.setTollId(reportPenalty.getToll().getTollId());
+                LocationCheckpointDTO checkpointArrivalDTO = new LocationCheckpointDTO();
+                checkpointArrivalDTO.setLocationId(reportPenalty.getToll().getCheckpointArrival().getLocationId());
+                checkpointArrivalDTO.setName(reportPenalty.getToll().getCheckpointArrival().getName());
+                checkpointArrivalDTO.setLatitud(reportPenalty.getToll().getCheckpointArrival().getLatitud());
+                checkpointArrivalDTO.setLongitud(reportPenalty.getToll().getCheckpointArrival().getLongitud());
+                LocationCheckpointDTO checkpointExitDTO = new LocationCheckpointDTO();
+                checkpointExitDTO.setLocationId(reportPenalty.getToll().getCheckpointExit().getLocationId());
+                checkpointExitDTO.setName(reportPenalty.getToll().getCheckpointExit().getName());
+                checkpointExitDTO.setLatitud(reportPenalty.getToll().getCheckpointExit().getLatitud());
+                checkpointExitDTO.setLongitud(reportPenalty.getToll().getCheckpointExit().getLongitud());
+                tollDTO.setCheckpointArrival(checkpointArrivalDTO);
+                tollDTO.setCheckpointExit(checkpointExitDTO);
+                tollDTO.setMileageKm(reportPenalty.getToll().getMileageKm());
+                tollDTO.setPrivateCarMaxSpeedKmH(reportPenalty.getToll().getPrivateCarMaxSpeedKmH());
+                tollDTO.setPublicServCarMaxSpeedKmH(reportPenalty.getToll().getPublicServCarMaxSpeedKmH());
+                reportPenaltiesDTO.setToll(tollDTO);
+            }
             reportPenaltiesDTOCollection.add(reportPenaltiesDTO);
         }
         this.reportPenalties = reportPenaltiesDTOCollection;
@@ -140,6 +143,7 @@ public class OneNumberPlateReportPenaltyResponseDTO {
         @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
         public LocalDateTime date;
 
+        public Integer currentSpeedKmH;
         public Integer debtAmount;
         public TollDTO toll;
         public Integer status;
