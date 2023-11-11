@@ -13,6 +13,15 @@ import java.util.Optional;
 @Repository
 public interface ReportPenaltyRepository extends CrudRepository<ReportPenalty, Long> {
     Optional<ReportPenalty> findTop1ByCarFeaturesNumberPlateOrderByDateDesc(@Param("number_plate") String numberPlate);
+
+//    Find all by car features number plate and car features ruat required
     List<ReportPenalty> findAllByCarFeaturesNumberPlateAndCarFeaturesRuatAndStatusOrderByDateDesc(@Param("number_plate") String numberPlate, @Param("ruat") String ruat, @Param("status") Integer status);
+
+//    Find all by car features number plate that includes the number plate required
+
+    Optional<List<ReportPenalty>> findAllByCarFeaturesNumberPlateContainingAndStatusOrderByDateDesc(@Param("number_plate") String numberPlate, @Param("status") Integer status);
+
+
+    Optional<List<ReportPenalty>> findAllByCarFeaturesRuatContainingAndStatusOrderByDateDesc(@Param("ruat") String ruat, @Param("status") Integer status);
     List<ReportPenalty> findAllByDateGreaterThanEqualAndStatusOrderByDateDesc(@Param("date") LocalDateTime date, @Param("status") Integer status);
 }
