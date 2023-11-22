@@ -70,7 +70,7 @@ public class CustomJWTAuthenticationFilter extends UsernamePasswordAuthenticatio
 
     @Override
     protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) throws IOException, ServletException {
-        log.error("Error: {}", failed.getMessage());
+        failed.printStackTrace();
         response.setStatus(401);
         response.setContentType(APPLICATION_JSON_VALUE);
         new ObjectMapper().writeValue(response.getOutputStream(), failed.getMessage());

@@ -19,6 +19,7 @@ public class IncidenReportService {
     private final IncidentReportRepository reportPenaltyRepository;
     private final UserRepository userRepository;
     private final OwnerRepository ownerRepository;
+    private final TypeIncidentRepository typeIncidentRepository;
 
     public List<IncidentReportResponseDTO> getReportPenaltyResponseDTOList(List<IncidentReport> incidentReports) {
         List<IncidentReportResponseDTO> response = new ArrayList<>();
@@ -39,9 +40,8 @@ public class IncidenReportService {
         incidentReport.setUbicacion(incidentReportRequestDTO.getUbicacion());
         incidentReport.setStatus(1);
         incidentReport.setDate(LocalDateTime.now());
-        TypeIncidentReport typeIncidentReport = new TypeIncidentReport();
-        typeIncidentReport.setName(incidentReportRequestDTO.getType());
-        typeIncidentReport.setStatus(1);
+        TypeIncidentReport typeIncidentReport = typeIncidentRepository.findByName(incidentReportRequestDTO.getType())
+                .orElseThrow(() -> new RuntimeException("No se encontro el tipo de incidente"));
         incidentReport.setTypeIncidentReport(typeIncidentReport);
         GIS gis = new GIS();
         gis.setLatitud(incidentReportRequestDTO.getLatitud());
