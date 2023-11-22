@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.math.BigInteger;
 import java.time.LocalDateTime;
 
 @Entity
@@ -34,6 +35,9 @@ public class ReportPenalty {
 
     @Column(name = "current_speed_km_h")
     private Integer currentSpeedKmH;
+
+    @Column(name = "travel_time_seg")
+    private BigInteger travelTimeSeg;
 
     @Column(name = "debt_amount")
     private Integer debtAmount;

@@ -11,6 +11,7 @@ import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 
+import java.math.BigInteger;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -67,12 +68,13 @@ public class ReportPenaltyService {
                         }
 
                         if (reportPenalty.getToll() != null && !lastReportExitCheckpointId.equals(currentReportArrivalCheckpointId)) {
-                            Integer differenceInMinutes = Utils.differenceInMinutes(lastReportPenalty.getDate(), reportPenalty.getDate());
+                            BigInteger differenceInSeconds = Utils.differenceInSeconds(lastReportPenalty.getDate(), reportPenalty.getDate());
                             Integer distance = reportPenalty.getToll().getMileageKm();
                             Integer maxSpeedKmH = getMaxSpeedFromCarType(reportPenalty);
-                            Integer currentSpeedKmH = Utils.calcSpeedKmH(differenceInMinutes, distance);
+                            Integer currentSpeedKmH = Utils.calcSpeedKmH(differenceInSeconds, distance);
                             reportPenalty.setCurrentSpeedKmH(currentSpeedKmH);
-//                            log.info("differenceInMinutes: " + differenceInMinutes + " distance: " + distance + " maxSpeedKmH: " + maxSpeedKmH + " currentSpeedKmH: " + currentSpeedKmH);
+                            reportPenalty.setTravelTimeSeg(differenceInSeconds);
+//                            log.info("differenceInSeconds: " + differenceInSeconds + " distance: " + distance + " maxSpeedKmH: " + maxSpeedKmH + " currentSpeedKmH: " + currentSpeedKmH);
                             if (currentSpeedKmH > maxSpeedKmH) {
                                 reportPenalty.setDebtAmount(200);
                                 reportPenalty.setStatus(1);

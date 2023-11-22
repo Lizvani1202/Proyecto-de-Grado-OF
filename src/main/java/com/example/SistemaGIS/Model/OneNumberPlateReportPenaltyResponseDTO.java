@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -57,6 +58,7 @@ public class OneNumberPlateReportPenaltyResponseDTO {
             reportPenaltiesDTO.setReportPenaltyId(reportPenalty.getReportPenaltyId());
             reportPenaltiesDTO.setDate(reportPenalty.getDate());
             reportPenaltiesDTO.setCurrentSpeedKmH(reportPenalty.getCurrentSpeedKmH());
+            reportPenaltiesDTO.setTravelTimeSeg(reportPenalty.getTravelTimeSeg());
             reportPenaltiesDTO.setDebtAmount(reportPenalty.getDebtAmount());
             reportPenaltiesDTO.setStatus(reportPenalty.getStatus());
             if (reportPenalty.getToll() != null) {
@@ -145,6 +147,7 @@ public class OneNumberPlateReportPenaltyResponseDTO {
 
         public Integer currentSpeedKmH;
         public Integer debtAmount;
+        public BigInteger travelTimeSeg;
         public TollDTO toll;
         public Integer status;
     }

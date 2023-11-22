@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
@@ -21,6 +22,7 @@ public class ReportPenaltyResponseDTO {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     public LocalDateTime date;
     public Integer currentSpeedKmH;
+    public BigInteger travelTimeSeg;
     public Integer debtAmount;
     public LocationCheckpointDTO locationCheckpoint;
     public TollDTO toll;
@@ -46,6 +48,7 @@ public class ReportPenaltyResponseDTO {
         this.setCarFeatures(carFeaturesDTO);
         this.setDate(reportPenalty.getDate());
         this.setCurrentSpeedKmH(reportPenalty.getCurrentSpeedKmH());
+        this.setTravelTimeSeg(reportPenalty.getTravelTimeSeg());
         this.setDebtAmount(reportPenalty.getDebtAmount());
         this.setStatus(reportPenalty.getStatus());
         OwnerDTO ownerDTO = new OwnerDTO();
