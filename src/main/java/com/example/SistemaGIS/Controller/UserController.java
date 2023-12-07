@@ -93,7 +93,7 @@ public class UserController {
                 person.setAddress(userdata.getPerson().getAddress());
                 person.setCity(userdata.getPerson().getCity());
                 user.setPerson(person);
-                User savedUser = userService.saveUser(user).orElseThrow(() -> new Exception("Error al guardar usuario"));
+                User savedUser = userService.updateUser(user).orElseThrow(() -> new Exception("Error al guardar usuario"));
                 UserRegisterResponseDTO response = new UserRegisterResponseDTO(savedUser);
                 return ResponseEntity.ok(response);
             } else {
@@ -178,7 +178,7 @@ public class UserController {
                 }
                 User user = userService.getUserById(userId).orElseThrow(() -> new Exception("Usuario no encontrado"));
                 user.setStatus(status);
-                User savedUser = userService.saveUser(user).orElseThrow(() -> new Exception("Error al guardar usuario"));
+                User savedUser = userService.updateUser(user).orElseThrow(() -> new Exception("Error al guardar usuario"));
                 UserResponseDTO response = new UserResponseDTO(savedUser);
                 return ResponseEntity.ok(response);
             } else {

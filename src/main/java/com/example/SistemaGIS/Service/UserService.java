@@ -39,6 +39,10 @@ public class UserService implements UserDetailsService {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         return Optional.of(userRepository.save(user));
     }
+
+    public Optional<User> updateUser(User user){
+        return Optional.of(userRepository.save(user));
+    }
     public void addRoleToUser(User user, String rolename){
         Role role = roleRepository.findRoleByRoleName(rolename).orElseThrow(()-> new RuntimeException("Error: Rol no encontrado"));
         user.getUserRoles().add(role);
