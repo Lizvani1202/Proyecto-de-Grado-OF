@@ -12,6 +12,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -73,5 +74,9 @@ public class UserService implements UserDetailsService {
 
     public Optional<User> getUserById(Long userId){
         return userRepository.findById(userId);
+    }
+
+    public Optional<List<Role>> getAllRoles(){
+        return Optional.of(roleRepository.findAll());
     }
 }

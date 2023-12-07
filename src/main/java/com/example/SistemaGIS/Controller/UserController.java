@@ -140,4 +140,26 @@ public class UserController {
         }
     }
 
+    @GetMapping("/get-roles")
+    @PreAuthorize("hasAnyAuthority('ROOT')")
+    public ResponseEntity<?> getRoles(){
+        try {
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            Collection<String> roles = new HashSet<>();
+            for (GrantedAuthority authority : authentication.getAuthorities()) {
+                roles.add(authority.getAuthority());
+            }
+            if (roles.contains("ROOT")){
+                List<Role> rolesList = userService.getAllRoles().orElseThrow(() -> new Exception("No se encontraron roles"));
+                List<Role> rolesResponse = rolesList.stream().filter(role -> !role.getRoleName().equals("ROOT")).collect(Collectors.toList());
+                return ResponseEntity.ok(rolesResponse);
+            } else {
+                return ResponseEntity.status(401).body("No autorizado");
+            }
+        } catch (Exception e){
+            log.error("Error al obtener roles: {}", e.getMessage());
+            return ResponseEntity.status(500).body(e.getMessage());
+        }
+    }
+
 }
