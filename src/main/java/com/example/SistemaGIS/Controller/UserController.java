@@ -67,6 +67,43 @@ public class UserController {
             return ResponseEntity.status(500).body(e.getMessage());
         }
     }
+    @PutMapping("/edit-user")
+    @PreAuthorize("hasAnyAuthority('ROOT')")
+    public ResponseEntity<?> editUser(@RequestBody UserEditRequestDTO userdata) {
+        try {
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            Collection<String> roles = new HashSet<>();
+            for (GrantedAuthority authority : authentication.getAuthorities()) {
+                roles.add(authority.getAuthority());
+            }
+            if (roles.contains("ROOT")){
+                User user = userService.getUserById(userdata.getUserId()).orElseThrow(() -> new Exception("Usuario no encontrado"));
+                if(userdata.getRoleId() != null){
+                    Role role = userService.getRoleById(userdata.getRoleId()).orElseThrow(() -> new Exception("Rol no encontrado"));
+                    user.getUserRoles().clear();
+                    user.getUserRoles().add(role);
+                }
+                user.setPhoneNumber(userdata.getPhoneNumber());
+                Person person = user.getPerson();
+                person.setFirstName(userdata.getPerson().getFirstName());
+                person.setFirstSurname(userdata.getPerson().getFirstSurname());
+                person.setSecondSurname(userdata.getPerson().getSecondSurname());
+                person.setSecondSurname(userdata.getPerson().getSecondSurname());
+                person.setBirthDate(userdata.getPerson().getBirthDate());
+                person.setAddress(userdata.getPerson().getAddress());
+                person.setCity(userdata.getPerson().getCity());
+                user.setPerson(person);
+                User savedUser = userService.saveUser(user).orElseThrow(() -> new Exception("Error al guardar usuario"));
+                UserRegisterResponseDTO response = new UserRegisterResponseDTO(savedUser);
+                return ResponseEntity.ok(response);
+            } else {
+                return ResponseEntity.status(401).body("No autorizado");
+            }
+        } catch (Exception e) {
+            log.error("Error al editar usuario: {}", e.getMessage());
+            return ResponseEntity.status(500).body(e.getMessage());
+        }
+    }
 
     @GetMapping("/refresh-token")
     public ResponseEntity<?> refreshToken(HttpServletRequest request) {
