@@ -22,6 +22,8 @@ public class UserRegisterRequestDTO {
 
     private Integer status;
 
+    private Long roleId;
+
     @Data
     public class PersonDTO {
         private String firstName;

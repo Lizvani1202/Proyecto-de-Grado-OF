@@ -48,6 +48,11 @@ public class UserService implements UserDetailsService {
         User user = new User();
         user.setEmail(userData.getEmail());
         user.setPassword(userData.getPassword());
+        if(userData.getRoleId() != null){
+            Role role = roleRepository.findById(userData.getRoleId()).orElseThrow(()-> new RuntimeException("Error: Rol no encontrado"));
+            user.setUserRoles(new ArrayList<>());
+            user.getUserRoles().add(role);
+        }
         user.setPhoneNumber(userData.getPhoneNumber());
         user.setStatus(userData.getStatus());
         Person person = new Person();
@@ -78,5 +83,9 @@ public class UserService implements UserDetailsService {
 
     public Optional<List<Role>> getAllRoles(){
         return Optional.of(roleRepository.findAll());
+    }
+
+    public Optional<Role> getRoleById(Long roleId){
+        return roleRepository.findById(roleId);
     }
 }

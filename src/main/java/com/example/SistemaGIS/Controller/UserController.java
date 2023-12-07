@@ -38,13 +38,26 @@ public class UserController {
             for (GrantedAuthority authority : authentication.getAuthorities()) {
                 roles.add(authority.getAuthority());
             }
-            User user = userService.instanceUser(userData);
-            if (roles.contains("SIS_ADMIN_ABC")){
-                userService.addRoleToUser(user, "ADMIN_ABC");
-            } else if (roles.contains("SIS_POLICIA")){
-                userService.addRoleToUser(user, "POLICIA");
+            User user;
+            if (roles.contains("ROOT")){
+                if (userData.getRoleId() != null){
+                    user = userService.instanceUser(userData);
+                } else {
+                    return ResponseEntity.status(400).body("Se debe especificar un rol");
+                }
             } else {
-                userService.addRoleToUser(user, "USER");
+                if (userData.getRoleId() == null){
+                    user = userService.instanceUser(userData);
+                    if (roles.contains("SIS_ADMIN_ABC")) {
+                        userService.addRoleToUser(user, "ADMIN_ABC");
+                    } else if (roles.contains("SIS_POLICIA")) {
+                        userService.addRoleToUser(user, "POLICIA");
+                    } else {
+                        userService.addRoleToUser(user, "USER");
+                    }
+                } else {
+                    return ResponseEntity.status(401).body("No autorizado para asignar rol");
+                }
             }
             User savedUser = userService.saveUser(user).orElseThrow(()-> new Exception("Error al guardar usuario"));
             UserRegisterResponseDTO response = new UserRegisterResponseDTO(savedUser);
