@@ -9,6 +9,7 @@ import com.example.SistemaGIS.Service.UserService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -30,7 +31,7 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping("/register")
-    public ResponseEntity<?> registerUser(@RequestBody UserRegisterRequestDTO userData, HttpServletRequest request) {
+    public ResponseEntity<?> registerUser(@RequestBody UserRegisterRequestDTO userData) {
         try {
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
             Collection<String> roles = new HashSet<>();
@@ -49,7 +50,7 @@ public class UserController {
             UserRegisterResponseDTO response = new UserRegisterResponseDTO(savedUser);
             return ResponseEntity.ok(response);
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("Error al registrar usuario: {}", e.getMessage());
             return ResponseEntity.status(500).body(e.getMessage());
         }
     }
@@ -85,8 +86,58 @@ public class UserController {
                 return ResponseEntity.status(401).body("Refresh token es requerido");
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("Error al refrescar token: {}", e.getMessage());
             return ResponseEntity.status(500).body(e.getMessage());
         }
     }
+
+    @GetMapping("/get-users")
+    @PreAuthorize("hasAnyAuthority('ROOT')")
+    public ResponseEntity<?> getUsers(){
+        try {
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            Collection<String> roles = new HashSet<>();
+            for (GrantedAuthority authority : authentication.getAuthorities()) {
+                roles.add(authority.getAuthority());
+            }
+            if (roles.contains("ROOT")){
+                List<User> users = userService.getAllUsers().orElseThrow(() -> new Exception("No se encontraron usuarios"));
+                List<UserResponseDTO> response = users.stream().map(UserResponseDTO::new).collect(Collectors.toList());
+                return ResponseEntity.ok(response);
+            } else {
+                return ResponseEntity.status(401).body("No autorizado");
+            }
+        } catch (Exception e){
+            log.error("Error al obtener usuarios: {}", e.getMessage());
+            return ResponseEntity.status(500).body(e.getMessage());
+        }
+    }
+
+    @GetMapping("/status-user")
+    @PreAuthorize("hasAnyAuthority('ROOT')")
+    public ResponseEntity<?> statusUser(@RequestParam("userId") Long userId, @RequestParam("status") Integer status){
+        try {
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            Collection<String> roles = new HashSet<>();
+            for (GrantedAuthority authority : authentication.getAuthorities()) {
+                roles.add(authority.getAuthority());
+            }
+            if (roles.contains("ROOT")){
+                if(status != 0 && status != 1){
+                    return ResponseEntity.status(400).body("Estado no válido");
+                }
+                User user = userService.getUserById(userId).orElseThrow(() -> new Exception("Usuario no encontrado"));
+                user.setStatus(status);
+                User savedUser = userService.saveUser(user).orElseThrow(() -> new Exception("Error al guardar usuario"));
+                UserResponseDTO response = new UserResponseDTO(savedUser);
+                return ResponseEntity.ok(response);
+            } else {
+                return ResponseEntity.status(401).body("No autorizado");
+            }
+        } catch (Exception e){
+            log.error("Error al cambiar estado de usuario: {}", e.getMessage());
+            return ResponseEntity.status(500).body(e.getMessage());
+        }
+    }
+
 }

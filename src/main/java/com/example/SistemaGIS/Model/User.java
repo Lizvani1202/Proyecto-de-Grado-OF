@@ -1,9 +1,8 @@
 package com.example.SistemaGIS.Model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -18,6 +17,8 @@ import java.util.HashSet;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
+@ToString(exclude = {"person", "userOwner", "userRoles"})
+@EqualsAndHashCode(exclude = {"person", "userOwner", "userRoles"})
 public class User implements UserDetails {
 
     @Id
@@ -30,6 +31,7 @@ public class User implements UserDetails {
     private Person person;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @JsonManagedReference
     private Collection<Owner> userOwner;
 
     @Column(name = "email")

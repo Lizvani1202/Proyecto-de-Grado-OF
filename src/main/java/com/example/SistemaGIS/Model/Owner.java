@@ -1,6 +1,7 @@
 package com.example.SistemaGIS.Model;
 
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 
 import javax.persistence.*;
@@ -25,11 +26,13 @@ public class Owner {
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "person_id")
+    @JsonManagedReference
     private Person person;
 
     @Column(name = "status")
     private Integer status;
 
     @OneToMany(mappedBy = "owner")
+    @JsonManagedReference
     private Collection<CarFeatures> ownerCar;
 }

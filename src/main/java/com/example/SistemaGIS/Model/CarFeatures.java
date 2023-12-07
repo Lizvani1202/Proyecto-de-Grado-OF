@@ -1,9 +1,8 @@
 package com.example.SistemaGIS.Model;
 
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import lombok.*;
 
 import javax.persistence.*;
 
@@ -12,6 +11,8 @@ import javax.persistence.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
+@ToString(exclude = {"owner"})
+@EqualsAndHashCode(exclude = {"owner"})
 public class CarFeatures {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,6 +24,7 @@ public class CarFeatures {
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "owner_id")
+    @JsonManagedReference
     private Owner owner;
 
     @Column(name = "number_plate")

@@ -12,6 +12,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -27,6 +28,10 @@ public class UserService implements UserDetailsService {
 
     public Optional<User> getUser(String email){
         return userRepository.findUserByEmail(email);
+    }
+
+    public Optional<List<User>> getAllUsers(){
+        return Optional.of(userRepository.findAll());
     }
 
     public Optional<User> saveUser(User user){
@@ -64,5 +69,9 @@ public class UserService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         return userRepository.findUserByEmail(email).orElseThrow(()-> new UsernameNotFoundException("User not found"));
+    }
+
+    public Optional<User> getUserById(Long userId){
+        return userRepository.findById(userId);
     }
 }
