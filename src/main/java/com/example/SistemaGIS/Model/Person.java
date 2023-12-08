@@ -29,7 +29,6 @@ public class Person {
     @Column(name = "second_surname")
     private String secondSurname;
 
-    @JsonFormat(pattern = "yyyy-MM-dd")
     @Column(name = "birth_date")
     private LocalDate birthDate;
 
